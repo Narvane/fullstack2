@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { BButton, BCard, BContainer } from 'bootstrap-vue-next'
+import { onMounted } from 'vue'
+import { BButton, BCard, BContainer, BSpinner } from 'bootstrap-vue-next'
 import TaskListColumn from '@/components/TaskListColumn.vue'
 import { useTaskStore } from '@/stores/taskStore'
 
 const store = useTaskStore()
 
-store.initDemoData()
+onMounted(() => {
+  store.fetchTaskLists()
+})
 </script>
 
 <template>
@@ -14,7 +17,17 @@ store.initDemoData()
       <h1 class="h4 mb-0">My board</h1>
     </header>
 
-    <div class="d-flex align-items-start gap-3 overflow-auto pb-2 flex-grow-1">
+    <div
+      v-if="store.isLoadingBoard"
+      class="flex-grow-1 d-flex align-items-center justify-content-center"
+    >
+      <b-spinner />
+    </div>
+
+    <div
+      v-else
+      class="d-flex align-items-start gap-3 overflow-auto pb-2 flex-grow-1"
+    >
       <TaskListColumn
         v-for="list in store.taskLists"
         :key="list.id"
@@ -30,7 +43,15 @@ store.initDemoData()
         style="min-width: 260px; max-height: 80vh; border-style: dashed;"
         body-class="p-3"
       >
-        <b-button variant="outline-primary" @click="() => store.addTaskList()">
+        <b-button
+          variant="outline-primary"
+          :disabled="store.isSaving"
+          @click="() => store.addTaskList()"
+        >
+          <span
+            v-if="store.isSaving"
+            class="spinner-border spinner-border-sm me-2"
+          />
           + New tasklist
         </b-button>
       </b-card>
