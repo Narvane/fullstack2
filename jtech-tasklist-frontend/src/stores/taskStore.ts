@@ -186,5 +186,41 @@ export const useTaskStore = defineStore('taskStore', {
         ui.showError('Erro ao atualizar título da tarefa')
       }
     },
+
+    async deleteTask(taskListId: number, taskId: number) {
+      const ui = useUiStore()
+
+      const list = this.taskLists.find((l) => l.id === taskListId)
+      if (!list) {
+        ui.showError('Lista não encontrada')
+        return
+      }
+
+      const originalTasks = [...list.tasks]
+      list.tasks = list.tasks.filter((t) => t.id !== taskId)
+
+      try {
+        // await api.delete(`/task-lists/${taskListId}/tasks/${taskId}`)
+        ui.showSuccess('Tarefa removida')
+      } catch (error: any) {
+        list.tasks = originalTasks
+        ui.showError('Erro ao remover tarefa')
+      }
+    },
+
+    async deleteTaskList(taskListId: number) {
+      const ui = useUiStore()
+
+      const originalLists = [...this.taskLists]
+      this.taskLists = this.taskLists.filter((l) => l.id !== taskListId)
+
+      try {
+        // await api.delete(`/task-lists/${taskListId}`)
+        ui.showSuccess('Lista removida')
+      } catch (error: any) {
+        this.taskLists = originalLists
+        ui.showError('Erro ao remover lista')
+      }
+    },
   },
 })

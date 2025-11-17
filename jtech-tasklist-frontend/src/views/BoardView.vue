@@ -36,7 +36,10 @@ onMounted(() => {
         @update-title="store.updateTaskListTitle"
         @toggle-completed="store.toggleTaskCompleted"
         @update-task-title="store.updateTaskTitle"
+        @delete-task="store.deleteTask"
+        @delete-task-list="store.deleteTaskList"
       />
+
 
       <b-card
         class="flex-shrink-0 d-flex align-items-center justify-content-center text-center"
