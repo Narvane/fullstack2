@@ -2,10 +2,7 @@ package br.com.jtech.tasklist.application.core.domains;
 
 import lombok.*;
 
-import java.util.List;
 import java.util.UUID;
-
-
 
 @Getter
 @Setter
@@ -13,10 +10,10 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tasklist {
+public class Task {
 
     private UUID id;
     private String title;
-    private List<Task> tasks;
+    private boolean completed;
 
- }
+}
