@@ -10,12 +10,12 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'add-task', taskListId: number, taskTitle: string): void
-  (e: 'update-title', taskListId: number, newTitle: string): void
-  (e: 'toggle-completed', taskListId: number, taskId: number): void
-  (e: 'update-task-title', taskListId: number, taskId: number, newTitle: string): void
-  (e: 'delete-task', taskListId: number, taskId: number): void
-  (e: 'delete-task-list', taskListId: number): void
+  (e: 'add-task', taskListId: string, taskTitle: string): void
+  (e: 'update-title', taskListId: string, newTitle: string): void
+  (e: 'toggle-completed', taskListId: string, taskId: string): void
+  (e: 'update-task-title', taskListId: string, taskId: string, newTitle: string): void
+  (e: 'delete-task', taskListId: string, taskId: string): void
+  (e: 'delete-task-list', taskListId: string): void
 }>()
 
 const isAdding = ref(false)

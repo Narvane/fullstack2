@@ -16,4 +16,6 @@ public interface TasklistRepository {
 
     List<Tasklist> findAll();
 
+    List<Tasklist> findByUserId(UUID userId);
+
 }

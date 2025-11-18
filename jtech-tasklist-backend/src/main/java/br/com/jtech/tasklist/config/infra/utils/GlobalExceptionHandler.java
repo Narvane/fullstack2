@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with J-Tech.
  */
-package br.com.jtech.tasklist.config.infra.handlers;
+package br.com.jtech.tasklist.config.infra.utils;
 
 
 

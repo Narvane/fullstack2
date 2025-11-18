@@ -22,6 +22,9 @@ public class TasklistEntity {
 
     private String title;
 
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
+
     @OneToMany(
             mappedBy = "tasklist",
             cascade = CascadeType.ALL,

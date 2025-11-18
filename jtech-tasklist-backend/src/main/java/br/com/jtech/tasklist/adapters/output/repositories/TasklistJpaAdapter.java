@@ -21,6 +21,7 @@ public class TasklistJpaAdapter implements TasklistRepository {
                 Tasklist.builder()
                         .id(tasklistEntity.getId())
                         .title(tasklistEntity.getTitle())
+                        .userId(tasklistEntity.getUserId())
                         .build());
     }
 
@@ -30,11 +31,13 @@ public class TasklistJpaAdapter implements TasklistRepository {
                 TasklistEntity.builder()
                         .id(tasklist.getId())
                         .title(tasklist.getTitle())
+                        .userId(tasklist.getUserId())
                         .build()
         );
         return Tasklist.builder()
                 .id(persistedTasklistEntity.getId())
                 .title(persistedTasklistEntity.getTitle())
+                .userId(persistedTasklistEntity.getUserId())
                 .build();
     }
 
@@ -49,6 +52,18 @@ public class TasklistJpaAdapter implements TasklistRepository {
                 .map(tasklistEntity -> Tasklist.builder()
                         .id(tasklistEntity.getId())
                         .title(tasklistEntity.getTitle())
+                        .userId(tasklistEntity.getUserId())
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public List<Tasklist> findByUserId(UUID userId) {
+        return repository.findByUserId(userId).stream()
+                .map(tasklistEntity -> Tasklist.builder()
+                        .id(tasklistEntity.getId())
+                        .title(tasklistEntity.getTitle())
+                        .userId(tasklistEntity.getUserId())
                         .build())
                 .collect(java.util.stream.Collectors.toList());
     }

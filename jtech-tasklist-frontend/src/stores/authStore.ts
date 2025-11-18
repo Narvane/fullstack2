@@ -3,14 +3,23 @@ import api from '@/services/api'
 import { useUiStore } from './uiStore'
 
 interface User {
-  id: number
+  id: string
   name: string
   email: string
 }
 
 interface LoginResponse {
+  id: string
+  name: string
+  email: string
   token: string
-  user: User
+}
+
+interface RegisterResponse {
+  id: string
+  name: string
+  email: string
+  token: string
 }
 
 export const useAuthStore = defineStore('authStore', {
@@ -37,34 +46,61 @@ export const useAuthStore = defineStore('authStore', {
       this.isLoading = true
 
       try {
-        // const { data } = await api.post<LoginResponse>('/auth/login', {
-        //   email,
-        //   password,
-        // })
-
-
-        const data: LoginResponse = {
-          token: 'token-fake-123',
-          user: {
-            id: 1,
-            name: 'Usuário Mockado',
-            email,
-          },
-        }
+        const { data } = await api.post<LoginResponse>('/api/v1/auth/login', {
+          email,
+          password,
+        })
 
         this.token = data.token
-        this.user = data.user
+        this.user = {
+          id: data.id,
+          name: data.name,
+          email: data.email,
+        }
 
         localStorage.setItem('auth_token', this.token)
         localStorage.setItem('auth_user', JSON.stringify(this.user))
 
-        ui.showSuccess('Login successful. (mock)')
+        ui.showSuccess('Login successful')
       } catch (error: any) {
         ui.showError(
           error?.response?.data?.message ||
           'Invalid credentials or login error'
         )
-        // throw error
+        throw error
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    async register(name: string, email: string, password: string) {
+      const ui = useUiStore()
+      this.isLoading = true
+
+      try {
+        const { data } = await api.post<RegisterResponse>('/api/v1/auth/register', {
+          name,
+          email,
+          password,
+        })
+
+        this.token = data.token
+        this.user = {
+          id: data.id,
+          name: data.name,
+          email: data.email,
+        }
+
+        localStorage.setItem('auth_token', this.token)
+        localStorage.setItem('auth_user', JSON.stringify(this.user))
+
+        ui.showSuccess('Registration successful')
+      } catch (error: any) {
+        ui.showError(
+          error?.response?.data?.message ||
+          'Registration error'
+        )
+        throw error
       } finally {
         this.isLoading = false
       }

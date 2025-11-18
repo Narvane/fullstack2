@@ -6,8 +6,10 @@ import br.com.jtech.tasklist.application.ports.protocols.TasklistInputData;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
 import br.com.jtech.tasklist.application.ports.protocols.TasklistOutputData;
 import br.com.jtech.tasklist.application.ports.output.repositories.TasklistRepository;
+import br.com.jtech.tasklist.config.infra.security.SecurityContext;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ListTasklistUseCase implements TasklistInputGateway {
@@ -22,7 +24,12 @@ public class ListTasklistUseCase implements TasklistInputGateway {
 
     @Override
     public void exec(TasklistInputData data) {
-        List<Tasklist> tasklists = tasklistRepository.findAll();
+        UUID userId = SecurityContext.getCurrentUserId();
+        if (userId == null) {
+            throw new RuntimeException("User not authenticated");
+        }
+
+        List<Tasklist> tasklists = tasklistRepository.findByUserId(userId);
 
         var tasklistsOutput = tasklists.stream()
                 .map(tasklist -> TasklistOutputData.builder()

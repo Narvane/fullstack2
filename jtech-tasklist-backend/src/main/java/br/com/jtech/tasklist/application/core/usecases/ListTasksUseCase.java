@@ -5,6 +5,8 @@ import br.com.jtech.tasklist.application.ports.protocols.TaskInputData;
 import br.com.jtech.tasklist.application.ports.output.TaskOutputGateway;
 import br.com.jtech.tasklist.application.ports.protocols.TaskOutputData;
 import br.com.jtech.tasklist.application.ports.output.repositories.TaskRepository;
+import br.com.jtech.tasklist.application.ports.output.repositories.TasklistRepository;
+import br.com.jtech.tasklist.config.infra.security.SecurityContext;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,20 +16,36 @@ public class ListTasksUseCase implements TaskInputGateway {
 
     private final TaskOutputGateway outputGateway;
     private final TaskRepository taskRepository;
+    private final TasklistRepository tasklistRepository;
 
-    public ListTasksUseCase(TaskOutputGateway outputGateway, TaskRepository taskRepository) {
+    public ListTasksUseCase(TaskOutputGateway outputGateway, TaskRepository taskRepository, TasklistRepository tasklistRepository) {
         this.outputGateway = outputGateway;
         this.taskRepository = taskRepository;
+        this.tasklistRepository = tasklistRepository;
     }
 
     @Override
     public void exec(TaskInputData data) {
+        UUID userId = SecurityContext.getCurrentUserId();
+        if (userId == null) {
+            throw new RuntimeException("User not authenticated");
+        }
+
         List<br.com.jtech.tasklist.application.core.domains.Task> tasks;
         
         if (data.getTasklistId() != null) {
+            var tasklist = tasklistRepository.findById(UUID.fromString(data.getTasklistId()))
+                    .orElseThrow(() -> new RuntimeException("Tasklist not found"));
+            if (!tasklist.getUserId().equals(userId)) {
+                throw new RuntimeException("Tasklist not found");
+            }
             tasks = taskRepository.findByTasklistId(UUID.fromString(data.getTasklistId()));
         } else {
-            tasks = taskRepository.findAll();
+            // List all tasks from user's tasklists
+            var userTasklists = tasklistRepository.findByUserId(userId);
+            tasks = userTasklists.stream()
+                    .flatMap(tasklist -> taskRepository.findByTasklistId(tasklist.getId()).stream())
+                    .collect(Collectors.toList());
         }
 
         var tasksOutput = tasks.stream()
