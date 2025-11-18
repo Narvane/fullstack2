@@ -11,7 +11,7 @@
 *  license agreement you entered into with J-Tech.
 *
 */
-package br.com.jtech.tasklist.adapters.input.controllers;
+package br.com.jtech.tasklist.adapters.input.controllers.tasklist;
 
 import br.com.jtech.tasklist.adapters.input.protocols.TasklistRequest;
 import br.com.jtech.tasklist.application.ports.input.CreateTasklistInputGateway;

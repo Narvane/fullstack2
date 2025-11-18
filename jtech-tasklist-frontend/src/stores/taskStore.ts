@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { TaskList } from '@/types/tasklist.ts'
+import type { Task } from '@/types/task.ts'
 import api from '@/services/api'
 import { useUiStore } from './uiStore'
 
@@ -18,31 +19,8 @@ export const useTaskStore = defineStore('taskStore', {
       const ui = useUiStore()
       this.isLoadingBoard = true
       try {
-        // const { data } = await api.get<TaskList[]>('/boards/current/task-lists')
-        // this.taskLists = data
-
-        if (this.taskLists.length === 0) {
-          this.taskLists = [
-            {
-              id: 1,
-              title: 'To do',
-              tasks: [
-                { id: 11, title: 'Study Vue', completed: false },
-                { id: 12, title: 'Mount board layout', completed: false },
-              ],
-            },
-            {
-              id: 2,
-              title: 'In progress',
-              tasks: [{ id: 21, title: 'Refactor API', completed: false }],
-            },
-            {
-              id: 3,
-              title: 'Done',
-              tasks: [{ id: 31, title: 'Project skeleton', completed: false }],
-            },
-          ]
-        }
+        const { data } = await api.get<TaskList[]>('/api/v1/tasklists')
+        this.taskLists = data
       } catch (error: any) {
         ui.showError('Erro ao carregar listas de tarefas')
       } finally {
@@ -61,8 +39,8 @@ export const useTaskStore = defineStore('taskStore', {
 
       this.isSaving = true
       try {
-        // const { data } = await api.post<TaskList>('/task-lists', { title: finalTitle })
-        // this.taskLists.push(data)
+        const { data } = await api.post('/api/v1/tasklists', { title: finalTitle })
+        this.taskLists.push(data)
 
         this.taskLists.push({
           id: nextTaskListId++,
@@ -94,23 +72,16 @@ export const useTaskStore = defineStore('taskStore', {
 
       this.isSaving = true
       try {
-        // const { data } = await api.post<Task>(`/task-lists/${taskListId}/tasks`, { title })
-        // list.tasks.push(data)
-
-        list.tasks.push({
-          id: nextTaskId++,
-          title,
-          description: '',
-          completed: false,
-        })
-
+        const { data } = await api.post('/api/v1/tasks', { title, taskListId })
+        list.tasks.push(data);
         ui.showSuccess('Tarefa criada')
       } catch (error: any) {
         ui.showError('Erro ao criar tarefa')
       } finally {
         this.isSaving = false
       }
-    },
+    }
+    ,
 
     async updateTaskListTitle(taskListId: number, newTitle: string) {
       const ui = useUiStore()
@@ -130,7 +101,7 @@ export const useTaskStore = defineStore('taskStore', {
       list.title = title
 
       try {
-        // await api.put(`/task-lists/${taskListId}`, { title })
+        await api.put(`/api/v1/tasklists/${taskListId}`, { title })
       } catch (error: any) {
         list.title = oldTitle
         ui.showError('Erro ao atualizar título da lista')
@@ -149,7 +120,7 @@ export const useTaskStore = defineStore('taskStore', {
       task.completed = !oldValue
 
       try {
-        // await api.patch(`/tasks/${taskId}`, { completed: task.completed })
+        await api.patch(`/tasks/${taskId}`, { completed: task.completed })
       } catch (error: any) {
         task.completed = oldValue
         ui.showError('Erro ao atualizar status da tarefa')
@@ -180,7 +151,7 @@ export const useTaskStore = defineStore('taskStore', {
       task.title = title
 
       try {
-        // await api.put(`/tasks/${taskId}`, { title })
+        await api.put(`/tasks/${taskId}`, { title })
       } catch (error: any) {
         task.title = oldTitle
         ui.showError('Erro ao atualizar título da tarefa')
@@ -200,7 +171,7 @@ export const useTaskStore = defineStore('taskStore', {
       list.tasks = list.tasks.filter((t) => t.id !== taskId)
 
       try {
-        // await api.delete(`/task-lists/${taskListId}/tasks/${taskId}`)
+        await api.delete(`/tasks/${taskId}`)
         ui.showSuccess('Tarefa removida')
       } catch (error: any) {
         list.tasks = originalTasks
@@ -215,7 +186,7 @@ export const useTaskStore = defineStore('taskStore', {
       this.taskLists = this.taskLists.filter((l) => l.id !== taskListId)
 
       try {
-        // await api.delete(`/task-lists/${taskListId}`)
+        await api.delete(`/api/v1/tasklists/${taskListId}`)
         ui.showSuccess('Lista removida')
       } catch (error: any) {
         this.taskLists = originalLists
