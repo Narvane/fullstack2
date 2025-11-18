@@ -5,15 +5,28 @@ import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
 import br.com.jtech.tasklist.application.ports.output.data.TasklistOutputData;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
 public class ListTasklistPresenter implements TasklistOutputGateway {
 
-    @Getter private ListTasklistResponse response;
+    private final List<ListTasklistResponse.TaskListResponse> tasklists = new ArrayList<>();
 
     @Override
     public void exec(TasklistOutputData data) {
-        response = ListTasklistResponse.builder()
-                .tasklists(data.getTasklists())
+        tasklists.add(
+                ListTasklistResponse.TaskListResponse.builder()
+                        .id(data.getId())
+                        .title(data.getTitle())
+                        .build()
+        );
+    }
+
+    public ListTasklistResponse getResponse() {
+        return ListTasklistResponse.builder()
+                .tasklists(List.copyOf(tasklists))
                 .build();
     }
-}
 
+}

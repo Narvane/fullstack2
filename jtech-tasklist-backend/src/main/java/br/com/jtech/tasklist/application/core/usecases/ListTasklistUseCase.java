@@ -1,5 +1,6 @@
 package br.com.jtech.tasklist.application.core.usecases;
 
+import br.com.jtech.tasklist.application.core.domains.Tasklist;
 import br.com.jtech.tasklist.application.ports.input.TasklistInputGateway;
 import br.com.jtech.tasklist.application.ports.input.data.TasklistInputData;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
@@ -21,7 +22,7 @@ public class ListTasklistUseCase implements TasklistInputGateway {
 
     @Override
     public void exec(TasklistInputData data) {
-        List<br.com.jtech.tasklist.application.core.domains.Tasklist> tasklists = tasklistRepository.findAll();
+        List<Tasklist> tasklists = tasklistRepository.findAll();
 
         var tasklistsOutput = tasklists.stream()
                 .map(tasklist -> TasklistOutputData.builder()
@@ -30,11 +31,7 @@ public class ListTasklistUseCase implements TasklistInputGateway {
                         .build())
                 .collect(Collectors.toList());
 
-        outputGateway.exec(
-                TasklistOutputData.builder()
-                        .tasklists(tasklistsOutput)
-                        .build()
-        );
+        outputGateway.execAll(tasklistsOutput);
     }
 }
 

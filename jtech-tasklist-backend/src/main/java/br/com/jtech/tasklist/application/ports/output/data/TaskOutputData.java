@@ -12,6 +12,5 @@ public class TaskOutputData {
     private String title;
     private Boolean completed;
     private String tasklistId;
-    private List<TaskOutputData> tasks;
 }
 

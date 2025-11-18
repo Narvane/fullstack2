@@ -10,5 +10,4 @@ import java.util.List;
 public class TasklistOutputData {
     private String id;
     private String title;
-    private List<TasklistOutputData> tasklists;
 }

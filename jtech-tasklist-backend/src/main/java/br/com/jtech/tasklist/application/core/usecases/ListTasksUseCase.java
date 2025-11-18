@@ -39,11 +39,7 @@ public class ListTasksUseCase implements TaskInputGateway {
                         .build())
                 .collect(Collectors.toList());
 
-        outputGateway.exec(
-                TaskOutputData.builder()
-                        .tasks(tasksOutput)
-                        .build()
-        );
+        outputGateway.execAll(tasksOutput);
     }
 }
 
