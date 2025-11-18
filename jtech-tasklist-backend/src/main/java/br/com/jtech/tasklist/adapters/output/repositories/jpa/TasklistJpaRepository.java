@@ -10,11 +10,11 @@
 *  license agreement you entered into with J-Tech.
 *
 */
-package br.com.jtech.tasklist.adapters.output.repositories;
+package br.com.jtech.tasklist.adapters.output.repositories.jpa;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
-import br.com.jtech.tasklist.adapters.output.repositories.entities.TasklistEntity;
+import br.com.jtech.tasklist.adapters.output.repositories.protocols.TasklistEntity;
 
 import java.util.UUID;
 
@@ -24,6 +24,6 @@ import java.util.UUID;
 * @author angelo.vicente
 */
 @Repository
-public interface TasklistRepository extends JpaRepository<TasklistEntity, UUID> {
+public interface TasklistJpaRepository extends JpaRepository<TasklistEntity, UUID> {
     
 }

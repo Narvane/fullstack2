@@ -5,7 +5,6 @@ import api from '@/services/api'
 import { useUiStore } from './uiStore'
 
 let nextTaskListId = 4
-let nextTaskId = 100
 
 export const useTaskStore = defineStore('taskStore', {
   state: () => ({
@@ -42,12 +41,7 @@ export const useTaskStore = defineStore('taskStore', {
         const { data } = await api.post('/api/v1/tasklists', { title: finalTitle })
         this.taskLists.push(data)
 
-        this.taskLists.push({
-          id: nextTaskListId++,
-          title: finalTitle,
-          tasks: [],
-        })
-
+        nextTaskListId++
         ui.showSuccess('Lista criada com sucesso')
       } catch (error: any) {
         ui.showError('Erro ao criar lista')

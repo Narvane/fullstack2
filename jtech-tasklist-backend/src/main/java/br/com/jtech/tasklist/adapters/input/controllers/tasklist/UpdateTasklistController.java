@@ -1,21 +1,46 @@
 package br.com.jtech.tasklist.adapters.input.controllers.tasklist;
 
+import br.com.jtech.tasklist.adapters.input.controllers.protocols.tasklist.UpdateTasklistRequest;
+import br.com.jtech.tasklist.adapters.output.presenters.UpdateTasklistPresenter;
+import br.com.jtech.tasklist.adapters.output.presenters.protocols.UpdateTasklistResponse;
+import br.com.jtech.tasklist.application.ports.input.TasklistInputGateway;
+import br.com.jtech.tasklist.application.ports.input.data.TasklistInputData;
+import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
+import br.com.jtech.tasklist.config.usecases.qualifiers.UpdateTask;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/tasklists")
 public class UpdateTasklistController {
 
-    @PutMapping("/{tasklistId}")
-    public ResponseEntity<Void> update(
-            @PathVariable Long tasklistId,
-            @RequestBody Object request) {
-        // TODO: atualizar título da tasklist (e possivelmente outras infos)
-        return ResponseEntity.noContent().build();
+    private final TasklistInputGateway inputGateway;
+    private final UpdateTasklistPresenter presenter;
+
+    public UpdateTasklistController(
+            @UpdateTask TasklistInputGateway inputGateway,
+            @UpdateTask TasklistOutputGateway outputGateway
+    ) {
+        this.inputGateway = inputGateway;
+        this.presenter = (UpdateTasklistPresenter) outputGateway;
     }
+
+    @PutMapping("/{tasklistId}")
+    public ResponseEntity<UpdateTasklistResponse> update(
+            @PathVariable String tasklistId,
+            @RequestBody UpdateTasklistRequest request) {
+
+        inputGateway.exec(
+                TasklistInputData.builder()
+                        .id(tasklistId)
+                        .title(request.getTitle())
+                        .build()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(presenter.getResponse());
+    }
+
 }
