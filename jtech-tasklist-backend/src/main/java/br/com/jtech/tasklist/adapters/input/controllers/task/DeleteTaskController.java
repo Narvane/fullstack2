@@ -1,7 +1,8 @@
 package br.com.jtech.tasklist.adapters.input.controllers.task;
 
 import br.com.jtech.tasklist.application.ports.input.TaskInputGateway;
-import br.com.jtech.tasklist.application.ports.input.data.TaskInputData;
+import br.com.jtech.tasklist.application.ports.protocols.TaskInputData;
+import br.com.jtech.tasklist.config.qualifiers.DeleteTask;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +15,7 @@ public class DeleteTaskController {
 
     private final TaskInputGateway inputGateway;
 
-    public DeleteTaskController(TaskInputGateway inputGateway) {
+    public DeleteTaskController(@DeleteTask TaskInputGateway inputGateway) {
         this.inputGateway = inputGateway;
     }
 

@@ -1,4 +1,4 @@
-package br.com.jtech.tasklist.adapters.input.controllers.protocols.tasklist;
+package br.com.jtech.tasklist.adapters.protocols.tasklist;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CreateTasklistRequest {
+public class CreateTasklistResponse {
+    private String id;
     private String title;
 }

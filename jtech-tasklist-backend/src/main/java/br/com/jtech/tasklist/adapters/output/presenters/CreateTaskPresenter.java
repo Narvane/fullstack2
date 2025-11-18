@@ -2,7 +2,7 @@ package br.com.jtech.tasklist.adapters.output.presenters;
 
 import br.com.jtech.tasklist.adapters.output.presenters.protocols.CreateTaskResponse;
 import br.com.jtech.tasklist.application.ports.output.TaskOutputGateway;
-import br.com.jtech.tasklist.application.ports.output.data.TaskOutputData;
+import br.com.jtech.tasklist.application.ports.protocols.TaskOutputData;
 import lombok.Getter;
 
 @Getter

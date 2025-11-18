@@ -1,4 +1,4 @@
-package br.com.jtech.tasklist.application.ports.input.data;
+package br.com.jtech.tasklist.application.ports.protocols;
 
 import lombok.Builder;
 import lombok.Getter;

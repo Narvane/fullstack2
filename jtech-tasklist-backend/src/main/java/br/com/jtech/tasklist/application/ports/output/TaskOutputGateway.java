@@ -1,6 +1,6 @@
 package br.com.jtech.tasklist.application.ports.output;
 
-import br.com.jtech.tasklist.application.ports.output.data.TaskOutputData;
+import br.com.jtech.tasklist.application.ports.protocols.TaskOutputData;
 
 import java.util.List;
 

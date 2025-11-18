@@ -1,12 +1,12 @@
 package br.com.jtech.tasklist.adapters.input.controllers.tasklist;
 
-import br.com.jtech.tasklist.adapters.input.controllers.protocols.tasklist.UpdateTasklistRequest;
+import br.com.jtech.tasklist.adapters.protocols.tasklist.UpdateTasklistRequest;
 import br.com.jtech.tasklist.adapters.output.presenters.UpdateTasklistPresenter;
 import br.com.jtech.tasklist.adapters.output.presenters.protocols.UpdateTasklistResponse;
 import br.com.jtech.tasklist.application.ports.input.TasklistInputGateway;
-import br.com.jtech.tasklist.application.ports.input.data.TasklistInputData;
+import br.com.jtech.tasklist.application.ports.protocols.TasklistInputData;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
-import br.com.jtech.tasklist.config.usecases.qualifiers.UpdateTasklist;
+import br.com.jtech.tasklist.config.qualifiers.UpdateTasklist;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

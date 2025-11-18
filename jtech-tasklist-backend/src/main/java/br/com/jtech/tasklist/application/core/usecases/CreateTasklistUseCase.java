@@ -3,9 +3,9 @@ package br.com.jtech.tasklist.application.core.usecases;
 
 import br.com.jtech.tasklist.application.core.domains.Tasklist;
 import br.com.jtech.tasklist.application.ports.input.TasklistInputGateway;
-import br.com.jtech.tasklist.application.ports.input.data.TasklistInputData;
+import br.com.jtech.tasklist.application.ports.protocols.TasklistInputData;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
-import br.com.jtech.tasklist.application.ports.output.data.TasklistOutputData;
+import br.com.jtech.tasklist.application.ports.protocols.TasklistOutputData;
 import br.com.jtech.tasklist.application.ports.output.repositories.TasklistRepository;
 
 public class CreateTasklistUseCase implements TasklistInputGateway {

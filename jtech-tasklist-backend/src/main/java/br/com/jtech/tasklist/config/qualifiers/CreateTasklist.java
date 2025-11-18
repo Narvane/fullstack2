@@ -1,4 +1,4 @@
-package br.com.jtech.tasklist.config.usecases.qualifiers;
+package br.com.jtech.tasklist.config.qualifiers;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 

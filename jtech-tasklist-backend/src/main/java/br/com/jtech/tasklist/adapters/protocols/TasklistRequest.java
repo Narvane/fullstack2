@@ -1,4 +1,4 @@
-package br.com.jtech.tasklist.adapters.input.controllers.protocols;
+package br.com.jtech.tasklist.adapters.protocols;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

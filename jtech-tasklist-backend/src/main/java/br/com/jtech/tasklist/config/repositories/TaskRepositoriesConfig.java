@@ -1,4 +1,4 @@
-package br.com.jtech.tasklist.config.usecases;
+package br.com.jtech.tasklist.config.repositories;
 
 import br.com.jtech.tasklist.adapters.output.repositories.TaskJpaAdapter;
 import br.com.jtech.tasklist.adapters.output.repositories.jpa.TaskJpaRepository;

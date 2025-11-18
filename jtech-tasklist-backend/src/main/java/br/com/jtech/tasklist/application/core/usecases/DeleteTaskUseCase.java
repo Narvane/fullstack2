@@ -1,8 +1,7 @@
 package br.com.jtech.tasklist.application.core.usecases;
 
 import br.com.jtech.tasklist.application.ports.input.TaskInputGateway;
-import br.com.jtech.tasklist.application.ports.input.data.TaskInputData;
-import br.com.jtech.tasklist.application.ports.output.TaskOutputGateway;
+import br.com.jtech.tasklist.application.ports.protocols.TaskInputData;
 import br.com.jtech.tasklist.application.ports.output.repositories.TaskRepository;
 
 import java.util.UUID;

@@ -2,7 +2,7 @@ package br.com.jtech.tasklist.adapters.output.presenters;
 
 import br.com.jtech.tasklist.adapters.output.presenters.protocols.ListTasklistResponse;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
-import br.com.jtech.tasklist.application.ports.output.data.TasklistOutputData;
+import br.com.jtech.tasklist.application.ports.protocols.TasklistOutputData;
 import lombok.Getter;
 
 import java.util.ArrayList;

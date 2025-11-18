@@ -1,6 +1,6 @@
 package br.com.jtech.tasklist.application.ports.input;
 
-import br.com.jtech.tasklist.application.ports.input.data.TaskInputData;
+import br.com.jtech.tasklist.application.ports.protocols.TaskInputData;
 
 public interface TaskInputGateway {
 

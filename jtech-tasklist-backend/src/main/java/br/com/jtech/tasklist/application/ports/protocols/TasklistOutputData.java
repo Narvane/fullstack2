@@ -1,9 +1,7 @@
-package br.com.jtech.tasklist.application.ports.output.data;
+package br.com.jtech.tasklist.application.ports.protocols;
 
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Builder
 @Getter

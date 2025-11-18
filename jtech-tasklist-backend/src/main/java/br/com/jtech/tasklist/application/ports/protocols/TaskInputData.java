@@ -1,16 +1,14 @@
-package br.com.jtech.tasklist.application.ports.output.data;
+package br.com.jtech.tasklist.application.ports.protocols;
 
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 @Builder
 @Getter
-public class TaskOutputData {
+public class TaskInputData {
     private String id;
     private String title;
-    private Boolean completed;
     private String tasklistId;
+    private Boolean completed;
 }
 

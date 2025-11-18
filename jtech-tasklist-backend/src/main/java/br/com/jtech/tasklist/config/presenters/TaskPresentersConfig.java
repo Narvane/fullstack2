@@ -1,7 +1,7 @@
-package br.com.jtech.tasklist.config.usecases;
+package br.com.jtech.tasklist.config.presenters;
 
 import br.com.jtech.tasklist.adapters.output.presenters.*;
-import br.com.jtech.tasklist.config.usecases.qualifiers.*;
+import br.com.jtech.tasklist.config.qualifiers.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;

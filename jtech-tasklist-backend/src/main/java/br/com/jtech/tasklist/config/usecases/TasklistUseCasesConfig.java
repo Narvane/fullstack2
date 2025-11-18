@@ -7,9 +7,10 @@ import br.com.jtech.tasklist.application.core.usecases.UpdateTasklistUseCase;
 import br.com.jtech.tasklist.application.ports.input.TasklistInputGateway;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
 import br.com.jtech.tasklist.application.ports.output.repositories.TasklistRepository;
-import br.com.jtech.tasklist.config.usecases.qualifiers.CreateTasklist;
-import br.com.jtech.tasklist.config.usecases.qualifiers.ListTasklist;
-import br.com.jtech.tasklist.config.usecases.qualifiers.UpdateTasklist;
+import br.com.jtech.tasklist.config.qualifiers.CreateTasklist;
+import br.com.jtech.tasklist.config.qualifiers.DeleteTaskList;
+import br.com.jtech.tasklist.config.qualifiers.ListTasklist;
+import br.com.jtech.tasklist.config.qualifiers.UpdateTasklist;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,6 +36,7 @@ public class TasklistUseCasesConfig {
     }
 
     @Bean
+    @DeleteTaskList
     public TasklistInputGateway deleteTasklistUseCase(
             TasklistRepository repository
     ) {

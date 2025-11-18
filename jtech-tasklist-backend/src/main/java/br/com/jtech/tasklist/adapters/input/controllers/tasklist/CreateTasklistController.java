@@ -1,13 +1,12 @@
 package br.com.jtech.tasklist.adapters.input.controllers.tasklist;
 
-import br.com.jtech.tasklist.adapters.input.controllers.protocols.tasklist.CreateTasklistRequest;
+import br.com.jtech.tasklist.adapters.protocols.tasklist.CreateTasklistRequest;
 import br.com.jtech.tasklist.adapters.output.presenters.CreateTasklistPresenter;
 import br.com.jtech.tasklist.adapters.output.presenters.protocols.CreateTasklistResponse;
 import br.com.jtech.tasklist.application.ports.input.TasklistInputGateway;
-import br.com.jtech.tasklist.application.ports.input.data.TasklistInputData;
+import br.com.jtech.tasklist.application.ports.protocols.TasklistInputData;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
-import br.com.jtech.tasklist.config.usecases.qualifiers.CreateTask;
-import br.com.jtech.tasklist.config.usecases.qualifiers.CreateTasklist;
+import br.com.jtech.tasklist.config.qualifiers.CreateTasklist;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

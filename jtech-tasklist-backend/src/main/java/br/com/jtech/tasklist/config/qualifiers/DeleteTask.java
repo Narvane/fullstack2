@@ -1,4 +1,4 @@
-package br.com.jtech.tasklist.config.usecases.qualifiers;
+package br.com.jtech.tasklist.config.qualifiers;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -10,5 +10,4 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
-public @interface UpdateTasklist {}
-
+public @interface DeleteTask {}

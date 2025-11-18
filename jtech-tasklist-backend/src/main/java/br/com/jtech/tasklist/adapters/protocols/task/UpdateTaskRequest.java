@@ -1,4 +1,4 @@
-package br.com.jtech.tasklist.adapters.input.controllers.protocols.task;
+package br.com.jtech.tasklist.adapters.protocols.task;
 
 import lombok.Getter;
 import lombok.Setter;
