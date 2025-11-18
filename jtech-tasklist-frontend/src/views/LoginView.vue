@@ -40,6 +40,15 @@
           </b-button>
         </div>
       </b-form>
+
+      <div class="text-center mt-3">
+        <p class="mb-0 text-muted">
+          Don't have an account?
+          <router-link to="/register" class="text-decoration-none">
+            Register here
+          </router-link>
+        </p>
+      </div>
     </b-card>
   </b-container>
 </template>

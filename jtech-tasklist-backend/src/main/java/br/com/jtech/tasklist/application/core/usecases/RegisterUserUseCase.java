@@ -6,6 +6,7 @@ import br.com.jtech.tasklist.application.ports.protocols.UserInputData;
 import br.com.jtech.tasklist.application.ports.output.UserOutputGateway;
 import br.com.jtech.tasklist.application.ports.protocols.UserOutputData;
 import br.com.jtech.tasklist.application.ports.output.repositories.UserRepository;
+import br.com.jtech.tasklist.config.infra.exceptions.ConflictException;
 import br.com.jtech.tasklist.config.infra.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -33,12 +34,11 @@ public class RegisterUserUseCase implements UserInputGateway {
     public void exec(UserInputData data) {
         // Check if user already exists
         if (userRepository.findByEmail(data.getEmail()).isPresent()) {
-            throw new RuntimeException("User with this email already exists");
+            throw new ConflictException("User with this email already exists");
         }
 
         // Create new user
         var user = User.builder()
-                .id(UUID.randomUUID())
                 .name(data.getName())
                 .email(data.getEmail())
                 .password(passwordEncoder.encode(data.getPassword()))
