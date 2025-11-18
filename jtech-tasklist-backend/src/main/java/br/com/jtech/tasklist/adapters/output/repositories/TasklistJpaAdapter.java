@@ -6,6 +6,7 @@ import br.com.jtech.tasklist.application.core.domains.Tasklist;
 import br.com.jtech.tasklist.application.ports.output.repositories.TasklistRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
