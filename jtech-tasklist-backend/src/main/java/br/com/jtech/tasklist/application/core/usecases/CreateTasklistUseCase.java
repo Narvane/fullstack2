@@ -2,26 +2,34 @@ package br.com.jtech.tasklist.application.core.usecases;
 
 
 import br.com.jtech.tasklist.application.core.domains.Tasklist;
-import br.com.jtech.tasklist.application.ports.input.CreateTasklistInputGateway;
-import br.com.jtech.tasklist.application.ports.output.CreateTasklistOutputGateway;
+import br.com.jtech.tasklist.application.ports.input.TasklistInputGateway;
+import br.com.jtech.tasklist.application.ports.input.data.TasklistInputData;
+import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
+import br.com.jtech.tasklist.application.ports.output.data.TasklistOutputData;
+import br.com.jtech.tasklist.application.ports.output.repositories.TasklistRepository;
 
-import java.util.UUID;
+public class CreateTasklistUseCase implements TasklistInputGateway {
 
-public class CreateTasklistUseCase implements CreateTasklistInputGateway {
+    private final TasklistOutputGateway outputGateway;
+    private final TasklistRepository tasklistRepository;
 
-    private final CreateTasklistOutputGateway createTasklistOutputGateway;
+    public CreateTasklistUseCase(TasklistOutputGateway outputGateway, TasklistRepository tasklistRepository) {
+        this.outputGateway = outputGateway;
+        this.tasklistRepository = tasklistRepository;
+    }
 
-    public CreateTasklistUseCase(CreateTasklistOutputGateway createTasklistOutputGateway) {
-        this.createTasklistOutputGateway = createTasklistOutputGateway;
-     }
-
-    public Tasklist exec(String title) {
-        return createTasklistOutputGateway.create(
+    public void exec(TasklistInputData data) {
+        var createdTask = tasklistRepository.save(
                 Tasklist.builder()
-                        .id(UUID.randomUUID())
-                        .title(title)
+                        .title(data.getTitle())
                         .build()
         );
-     }
+        outputGateway.exec(
+                TasklistOutputData.builder()
+                        .id(createdTask.getId().toString())
+                        .title(createdTask.getTitle())
+                        .build()
+        );
+    }
 
- }
+}

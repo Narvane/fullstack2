@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-public class UpdateTasklistJpaAdapter implements TasklistRepository {
+public class TasklistJpaAdapter implements TasklistRepository {
 
     private final TasklistJpaRepository repository;
 
@@ -25,15 +25,15 @@ public class UpdateTasklistJpaAdapter implements TasklistRepository {
 
     @Override
     public Tasklist save(Tasklist tasklist) {
-        var updatedTasklistEntity =  repository.save(
+        var persistedTasklistEntity =  repository.save(
                 TasklistEntity.builder()
                         .id(tasklist.getId())
                         .title(tasklist.getTitle())
                         .build()
         );
         return Tasklist.builder()
-                .id(updatedTasklistEntity.getId())
-                .title(updatedTasklistEntity.getTitle())
+                .id(persistedTasklistEntity.getId())
+                .title(persistedTasklistEntity.getTitle())
                 .build();
     }
 

@@ -26,14 +26,14 @@ public class UpdateTasklistController {
         this.presenter = (UpdateTasklistPresenter) outputGateway;
     }
 
-    @PutMapping("/{tasklistId}")
+    @PutMapping("/{id}")
     public ResponseEntity<UpdateTasklistResponse> update(
-            @PathVariable String tasklistId,
+            @PathVariable String id,
             @RequestBody UpdateTasklistRequest request) {
 
         inputGateway.exec(
                 TasklistInputData.builder()
-                        .id(tasklistId)
+                        .id(id)
                         .title(request.getTitle())
                         .build()
         );
