@@ -7,8 +7,11 @@ import java.util.List;
 
 @Builder
 @Getter
-public class TasklistOutputData {
+public class TaskOutputData {
     private String id;
     private String title;
-    private List<TasklistOutputData> tasklists;
+    private Boolean completed;
+    private String tasklistId;
+    private List<TaskOutputData> tasks;
 }
+

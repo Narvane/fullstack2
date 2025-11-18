@@ -6,7 +6,7 @@ import br.com.jtech.tasklist.adapters.output.presenters.protocols.UpdateTasklist
 import br.com.jtech.tasklist.application.ports.input.TasklistInputGateway;
 import br.com.jtech.tasklist.application.ports.input.data.TasklistInputData;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
-import br.com.jtech.tasklist.config.usecases.qualifiers.UpdateTask;
+import br.com.jtech.tasklist.config.usecases.qualifiers.UpdateTasklist;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +19,8 @@ public class UpdateTasklistController {
     private final UpdateTasklistPresenter presenter;
 
     public UpdateTasklistController(
-            @UpdateTask TasklistInputGateway inputGateway,
-            @UpdateTask TasklistOutputGateway outputGateway
+            @UpdateTasklist TasklistInputGateway inputGateway,
+            @UpdateTasklist TasklistOutputGateway outputGateway
     ) {
         this.inputGateway = inputGateway;
         this.presenter = (UpdateTasklistPresenter) outputGateway;

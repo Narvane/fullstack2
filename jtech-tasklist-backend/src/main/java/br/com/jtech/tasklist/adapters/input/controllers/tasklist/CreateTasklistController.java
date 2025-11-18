@@ -7,6 +7,7 @@ import br.com.jtech.tasklist.application.ports.input.TasklistInputGateway;
 import br.com.jtech.tasklist.application.ports.input.data.TasklistInputData;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
 import br.com.jtech.tasklist.config.usecases.qualifiers.CreateTask;
+import br.com.jtech.tasklist.config.usecases.qualifiers.CreateTasklist;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +25,8 @@ public class CreateTasklistController {
     private final CreateTasklistPresenter presenter;
 
     public CreateTasklistController(
-            @CreateTask TasklistInputGateway inputGateway,
-            @CreateTask TasklistOutputGateway outputGateway) {
+            @CreateTasklist TasklistInputGateway inputGateway,
+            @CreateTasklist TasklistOutputGateway outputGateway) {
         this.inputGateway = inputGateway;
         this.presenter = (CreateTasklistPresenter) outputGateway;
     }

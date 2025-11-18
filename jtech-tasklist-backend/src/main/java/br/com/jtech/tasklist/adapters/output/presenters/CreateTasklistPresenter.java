@@ -5,9 +5,10 @@ import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
 import br.com.jtech.tasklist.application.ports.output.data.TasklistOutputData;
 import lombok.Getter;
 
+@Getter
 public class CreateTasklistPresenter implements TasklistOutputGateway {
 
-    @Getter private CreateTasklistResponse response;
+    private CreateTasklistResponse response;
 
     @Override
     public void exec(TasklistOutputData data) {

@@ -12,7 +12,10 @@ public class UpdateTasklistPresenter implements TasklistOutputGateway {
 
     @Override
     public void exec(TasklistOutputData data) {
-
+        response = UpdateTasklistResponse.builder()
+                .id(data.getId())
+                .title(data.getTitle())
+                .build();
     }
 
 }

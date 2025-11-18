@@ -37,4 +37,19 @@ public class TasklistJpaAdapter implements TasklistRepository {
                 .build();
     }
 
+    @Override
+    public void deleteById(UUID id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public List<Tasklist> findAll() {
+        return repository.findAll().stream()
+                .map(tasklistEntity -> Tasklist.builder()
+                        .id(tasklistEntity.getId())
+                        .title(tasklistEntity.getTitle())
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
+    }
+
 }

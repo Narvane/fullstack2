@@ -1,5 +1,11 @@
 package br.com.jtech.tasklist.adapters.input.controllers.task;
 
+import br.com.jtech.tasklist.adapters.output.presenters.ListTasksPresenter;
+import br.com.jtech.tasklist.adapters.output.presenters.protocols.ListTasksResponse;
+import br.com.jtech.tasklist.application.ports.input.TaskInputGateway;
+import br.com.jtech.tasklist.application.ports.input.data.TaskInputData;
+import br.com.jtech.tasklist.application.ports.output.TaskOutputGateway;
+import br.com.jtech.tasklist.config.usecases.qualifiers.ListTasks;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,10 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/tasks")
 public class ListTasksController {
 
+    private final TaskInputGateway inputGateway;
+    private final ListTasksPresenter presenter;
+
+    public ListTasksController(
+            @ListTasks TaskInputGateway inputGateway,
+            @ListTasks TaskOutputGateway outputGateway) {
+        this.inputGateway = inputGateway;
+        this.presenter = (ListTasksPresenter) outputGateway;
+    }
+
     @GetMapping
-    public ResponseEntity<Object> list(
-            @RequestParam(name = "taskListId", required = false) Long taskListId) {
-        // TODO: se taskListId != null, listar tasks dessa lista; senão, todas
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ListTasksResponse> list(
+            @RequestParam(name = "taskListId", required = false) String taskListId) {
+        inputGateway.exec(
+                TaskInputData.builder()
+                        .tasklistId(taskListId)
+                        .build()
+        );
+        return ResponseEntity.ok(presenter.getResponse());
     }
 }

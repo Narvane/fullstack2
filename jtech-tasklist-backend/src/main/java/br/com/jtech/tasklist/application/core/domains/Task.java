@@ -15,5 +15,6 @@ public class Task {
     private UUID id;
     private String title;
     private boolean completed;
+    private String tasklistId;
 
 }
