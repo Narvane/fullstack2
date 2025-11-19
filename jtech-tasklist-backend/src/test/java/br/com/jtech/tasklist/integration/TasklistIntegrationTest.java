@@ -150,14 +150,14 @@ class TasklistIntegrationTest {
     }
 
     @Test
-    void shouldReturnUnauthorizedWhenNotAuthenticated() throws Exception {
+    void shouldReturnForbiddenWhenNotAuthenticated() throws Exception {
         Map<String, String> request = new HashMap<>();
         request.put("title", "My Task List");
 
         mockMvc.perform(post("/api/v1/tasklists")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 }
 
