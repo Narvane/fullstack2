@@ -53,3 +53,5 @@ This generated password is for development use only. Your security configuration
 2025-11-19T07:53:45.228-03:00  INFO 10632 --- [tasklist] [RMI TCP Connection(3)-192.168.224.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2025-11-19T07:53:45.233-03:00  INFO 10632 --- [tasklist] [RMI TCP Connection(3)-192.168.224.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
 2025-11-19T07:54:08.211-03:00  INFO 10632 --- [tasklist] [http-nio-8080-exec-10] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 569 ms
+2025-11-19T12:00:53.686-03:00  WARN 10632 --- [tasklist] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3h12s875ms562µs800ns).
+2025-11-19T12:29:37.848-03:00  WARN 10632 --- [tasklist] [HikariPool-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=28m55s327ms228µs500ns).

@@ -1,10 +1,23 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { BButton, BCard, BContainer, BSpinner } from 'bootstrap-vue-next'
 import TaskListColumn from '@/components/TaskListColumn.vue'
 import { useTaskStore } from '@/stores/taskStore'
+import { useAuthStore } from '@/stores/authStore'
 
 const store = useTaskStore()
+const auth = useAuthStore()
+const router = useRouter()
+
+if (!auth.user) {
+  auth.loadFromStorage()
+}
+
+const handleLogout = () => {
+  auth.logout()
+  router.push({ name: 'login' })
+}
 
 onMounted(() => {
   store.fetchTaskLists()
@@ -14,7 +27,17 @@ onMounted(() => {
 <template>
   <b-container fluid class="py-3 h-100 bg-light d-flex flex-column">
     <header class="d-flex align-items-center mb-3">
-      <h1 class="h4 mb-0">My board</h1>
+      <h1 class="h4 mb-0">My Board</h1>
+      <div class="ms-auto d-flex align-items-center gap-3">
+        <span class="text-muted small" v-if="auth.user">{{ auth.user.email }}</span>
+        <b-button
+          size="sm"
+          variant="outline-danger"
+          @click="handleLogout"
+        >
+          Logout
+        </b-button>
+      </div>
     </header>
 
     <div
