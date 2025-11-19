@@ -4,8 +4,6 @@ import type { Task } from '@/types/task.ts'
 import api from '@/services/api'
 import { useUiStore } from './uiStore'
 
-let nextTaskListId = 4
-
 export const useTaskStore = defineStore('taskStore', {
   state: () => ({
     taskLists: [] as TaskList[],
@@ -14,6 +12,18 @@ export const useTaskStore = defineStore('taskStore', {
   }),
 
   actions: {
+    getNextDefaultTitle(): string {
+      const base = 'New list'
+      const titles = new Set(this.taskLists.map((list) => list.title))
+      let suffix = this.taskLists.length + 1
+      let candidate = `${base} ${suffix}`
+      while (titles.has(candidate)) {
+        suffix += 1
+        candidate = `${base} ${suffix}`
+      }
+      return candidate
+    },
+
     async fetchTaskLists() {
       const ui = useUiStore()
       this.isLoadingBoard = true
@@ -41,7 +51,7 @@ export const useTaskStore = defineStore('taskStore', {
 
     async addTaskList(title?: string) {
       const ui = useUiStore()
-      const finalTitle = title?.trim() || `New list ${nextTaskListId}`
+      const finalTitle = title?.trim() || this.getNextDefaultTitle()
 
       if (!finalTitle) {
         ui.showError('O título da lista é obrigatório')
@@ -51,9 +61,11 @@ export const useTaskStore = defineStore('taskStore', {
       this.isSaving = true
       try {
         const { data } = await api.post('/api/v1/tasklists', { title: finalTitle })
-        this.taskLists.push(data)
+        this.taskLists.push({
+          ...data,
+          tasks: [],
+        })
 
-        nextTaskListId++
         ui.showSuccess('Lista criada com sucesso')
       } catch (error: any) {
         ui.showError('Erro ao criar lista')

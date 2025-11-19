@@ -29,7 +29,7 @@ onMounted(() => {
     <header class="d-flex align-items-center mb-3">
       <h1 class="h4 mb-0">My Board</h1>
       <div class="ms-auto d-flex align-items-center gap-3">
-        <span class="text-muted small" v-if="auth.user">{{ auth.user.email }}</span>
+        <span class="text-muted small" v-if="auth.user">{{ auth.user.name }}</span>
         <b-button
           size="sm"
           variant="outline-danger"
