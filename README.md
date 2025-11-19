@@ -80,6 +80,3 @@ Aplicação fullstack de gerenciamento de tarefas multiusuário construída para
 
 - **Isolamento de domínios sensíveis**: em um cenário de maior escala, migraria o módulo de usuários/dados pessoais para um microserviço dedicado, mantendo o tasklist separado e reduzindo o raio de impacto de mudanças.
 - **Autenticação enterprise**: substituiria o fluxo atual por OAuth2/OIDC com Authorization Server externo (ex.: Keycloak ou Cognito) e tokens de acesso/refresh robustos para suportar integrações com parceiros.
-- **Segurança de dados**: adicionaria encriptação transparente para campos sensíveis, políticas de rotação de segredos e observabilidade centralizada (audit logging, tracing distribuído).
-- **Infra escalável**: containers separados para frontend/backend, banco gerenciado e provisionamento IaC, permitindo autoscaling e deploy independente de cada contexto.
-
