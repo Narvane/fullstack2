@@ -1,0 +1,740 @@
+openapi: 3.0.3
+info:
+  title: Tasklist API
+  description: API for managing tasklists and tasks with JWT authentication
+  version: v1
+  contact:
+    name: Jtech Solucoes em Informatica
+    email: support@jtech.com.br
+servers:
+  - url: http://localhost:8080
+    description: Development Server
+  - url: ${api.url.homologation}
+    description: Homologation Server
+  - url: ${api.url.production}
+    description: Production Server
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Authentication
+    description: User authentication and registration endpoints
+  - name: Tasklists
+    description: Tasklist management endpoints
+  - name: Tasks
+    description: Task management endpoints
+
+paths:
+  /api/v1/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register new user
+      description: Creates a new user account and returns JWT token and user information
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserRequest'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterUserResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: User with this email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate user
+      description: Authenticates a user with email and password, returns JWT token and user information
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticateUserRequest'
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticateUserResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/tasklists:
+    get:
+      tags:
+        - Tasklists
+      summary: List all tasklists
+      description: Returns all tasklists belonging to the authenticated user
+      responses:
+        '200':
+          description: Tasklists retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTasklistResponse'
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Tasklists
+      summary: Create a new tasklist
+      description: Creates a new tasklist for the authenticated user. Duplicate titles are not allowed per user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTasklistRequest'
+      responses:
+        '201':
+          description: Tasklist created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTasklistResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict - A tasklist with this title already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/tasklists/{id}:
+    put:
+      tags:
+        - Tasklists
+      summary: Update a tasklist
+      description: Updates the title of a tasklist. Duplicate titles are not allowed per user.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Tasklist ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTasklistRequest'
+      responses:
+        '200':
+          description: Tasklist updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTasklistResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Tasklist not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict - A tasklist with this title already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Tasklists
+      summary: Delete a tasklist
+      description: Deletes a tasklist and all its tasks. Only the owner can delete their tasklist.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Tasklist ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Tasklist deleted successfully
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Tasklist not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/tasks:
+    get:
+      tags:
+        - Tasks
+      summary: List tasks
+      description: Returns tasks. If taskListId is provided, returns tasks from that tasklist. Otherwise, returns all tasks from user's tasklists.
+      parameters:
+        - name: taskListId
+          in: query
+          required: false
+          description: Optional tasklist ID to filter tasks
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Tasks retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTasksResponse'
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Tasklist not found (when taskListId is provided)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Tasks
+      summary: Create a new task
+      description: Creates a new task in the specified tasklist. Duplicate titles are not allowed within the same tasklist.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTaskResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Tasklist not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict - A task with this title already exists in this tasklist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/tasks/{id}:
+    put:
+      tags:
+        - Tasks
+      summary: Update a task
+      description: Updates task properties (title, tasklist, completion status). Duplicate titles are not allowed within the same tasklist.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTaskResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Task or tasklist not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict - A task with this title already exists in this tasklist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Tasks
+      summary: Delete a task
+      description: Deletes a task. Only the owner of the tasklist can delete tasks.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Task deleted successfully
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/tasks/{id}/complete:
+    patch:
+      tags:
+        - Tasks
+      summary: Toggle task completion status
+      description: Toggles the completion status of a task (completed <-> not completed)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Task completion status toggled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteTaskResponse'
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authentication. Provide the token in the format Bearer {token}
+
+  schemas:
+    RegisterUserRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: User's full name
+          example: John Doe
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: john.doe@example.com
+        password:
+          type: string
+          format: password
+          minLength: 6
+          description: User's password
+          example: password123
+
+    AuthenticateUserRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: john.doe@example.com
+        password:
+          type: string
+          format: password
+          description: User's password
+          example: password123
+
+    RegisterUserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: User ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          description: User's full name
+          example: John Doe
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: john.doe@example.com
+        token:
+          type: string
+          description: JWT authentication token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    AuthenticateUserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: User ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          description: User's full name
+          example: John Doe
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: john.doe@example.com
+        token:
+          type: string
+          description: JWT authentication token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    CreateTasklistRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Title of the tasklist
+          example: My Task List
+
+    CreateTasklistResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Tasklist ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        title:
+          type: string
+          description: Title of the tasklist
+          example: My Task List
+
+    UpdateTasklistRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: New title for the tasklist
+          example: Updated Task List
+
+    UpdateTasklistResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Tasklist ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        title:
+          type: string
+          description: Title of the tasklist
+          example: Updated Task List
+
+    ListTasklistResponse:
+      type: object
+      properties:
+        tasklists:
+          type: array
+          items:
+            $ref: '#/components/schemas/TasklistItem'
+      description: List of tasklists
+
+    TasklistItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Tasklist ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        title:
+          type: string
+          description: Title of the tasklist
+          example: My Task List
+
+    CreateTaskRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Title of the task
+          example: Complete project documentation
+        tasklistId:
+          type: string
+          format: uuid
+          description: ID of the tasklist this task belongs to
+          example: 550e8400-e29b-41d4-a716-446655440000
+
+    CreateTaskResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Task ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        title:
+          type: string
+          description: Title of the task
+          example: Complete project documentation
+        completed:
+          type: boolean
+          description: Completion status of the task
+          example: false
+        tasklistId:
+          type: string
+          format: uuid
+          description: ID of the tasklist this task belongs to
+          example: 550e8400-e29b-41d4-a716-446655440000
+
+    UpdateTaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: New title for the task
+          example: Updated task title
+        tasklistId:
+          type: string
+          format: uuid
+          description: ID of the tasklist to move this task to
+          example: 550e8400-e29b-41d4-a716-446655440000
+        completed:
+          type: boolean
+          description: Completion status of the task
+          example: true
+
+    UpdateTaskResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Task ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        title:
+          type: string
+          description: Title of the task
+          example: Updated task title
+        completed:
+          type: boolean
+          description: Completion status of the task
+          example: true
+        tasklistId:
+          type: string
+          format: uuid
+          description: ID of the tasklist this task belongs to
+          example: 550e8400-e29b-41d4-a716-446655440000
+
+    CompleteTaskResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Task ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        title:
+          type: string
+          description: Title of the task
+          example: Complete project documentation
+        completed:
+          type: boolean
+          description: Completion status of the task
+          example: true
+        tasklistId:
+          type: string
+          format: uuid
+          description: ID of the tasklist this task belongs to
+          example: 550e8400-e29b-41d4-a716-446655440000
+
+    ListTasksResponse:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskItem'
+      description: List of tasks
+
+    TaskItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Task ID
+          example: 550e8400-e29b-41d4-a716-446655440000
+        title:
+          type: string
+          description: Title of the task
+          example: Complete project documentation
+        completed:
+          type: boolean
+          description: Completion status of the task
+          example: false
+        tasklistId:
+          type: string
+          format: uuid
+          description: ID of the tasklist this task belongs to
+          example: 550e8400-e29b-41d4-a716-446655440000
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: An error occurred
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp when the error occurred
+        status:
+          type: integer
+          description: HTTP status code
+          example: 400
+

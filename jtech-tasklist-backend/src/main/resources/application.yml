@@ -40,6 +40,7 @@ springdoc:
     groups:
       enabled: 'true'
     path: /doc/tasklist/v3/api-documents
+    enabled: true
   swagger-ui:
     enabled: 'true'
     path: /doc/tasklist/v1/api.html
@@ -47,6 +48,11 @@ springdoc:
     filter: true
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
+  show-actuator: false
+  use-management-port: false
+  model-and-view-allowed: false
+  write-only-media-types: false
+  default-flat-param-object: false
 api:
   version: v1
   description: Description here
