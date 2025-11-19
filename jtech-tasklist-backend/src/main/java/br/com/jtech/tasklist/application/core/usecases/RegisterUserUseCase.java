@@ -32,12 +32,10 @@ public class RegisterUserUseCase implements UserInputGateway {
 
     @Override
     public void exec(UserInputData data) {
-        // Check if user already exists
         if (userRepository.findByEmail(data.getEmail()).isPresent()) {
             throw new ConflictException("User with this email already exists");
         }
 
-        // Create new user
         var user = User.builder()
                 .name(data.getName())
                 .email(data.getEmail())
@@ -46,7 +44,6 @@ public class RegisterUserUseCase implements UserInputGateway {
 
         var savedUser = userRepository.save(user);
 
-        // Generate JWT token
         String token = jwtService.generateToken(savedUser.getId(), savedUser.getEmail());
 
         outputGateway.exec(

@@ -36,7 +36,6 @@ public class AuthenticateUserUseCase implements UserInputGateway {
             throw new UnauthorizedException("Invalid credentials");
         }
 
-        // Generate JWT token
         String token = jwtService.generateToken(user.getId(), user.getEmail());
 
         outputGateway.exec(

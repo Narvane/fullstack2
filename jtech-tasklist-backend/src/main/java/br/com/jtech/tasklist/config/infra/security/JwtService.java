@@ -18,7 +18,7 @@ public class JwtService {
     @Value("${jwt.secret:your-256-bit-secret-key-for-jwt-token-generation-minimum-32-characters}")
     private String secret;
 
-    @Value("${jwt.expiration:86400000}") // 24 hours default
+    @Value("${jwt.expiration:86400000}")
     private Long expiration;
 
     private SecretKey getSigningKey() {

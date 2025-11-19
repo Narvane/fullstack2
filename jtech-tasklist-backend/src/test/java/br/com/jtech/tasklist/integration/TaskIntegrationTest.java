@@ -34,7 +34,6 @@ class TaskIntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        // Register and authenticate user
         Map<String, String> registerRequest = new HashMap<>();
         registerRequest.put("name", "Test User");
         registerRequest.put("email", "task-test@example.com");
@@ -51,7 +50,6 @@ class TaskIntegrationTest {
         Map<String, Object> response = objectMapper.readValue(registerResponse, Map.class);
         authToken = (String) response.get("token");
 
-        // Create a tasklist for tasks
         Map<String, String> tasklistRequest = new HashMap<>();
         tasklistRequest.put("title", "Test Tasklist");
 
@@ -87,7 +85,6 @@ class TaskIntegrationTest {
 
     @Test
     void shouldListTasks() throws Exception {
-        // Create a task first
         Map<String, String> createRequest = new HashMap<>();
         createRequest.put("title", "List Test Task");
         createRequest.put("tasklistId", tasklistId);
@@ -98,7 +95,6 @@ class TaskIntegrationTest {
                         .content(objectMapper.writeValueAsString(createRequest)))
                 .andExpect(status().isCreated());
 
-        // List tasks
         mockMvc.perform(get("/api/v1/tasks")
                         .header("Authorization", "Bearer " + authToken))
                 .andExpect(status().isOk())
@@ -109,7 +105,6 @@ class TaskIntegrationTest {
 
     @Test
     void shouldUpdateTask() throws Exception {
-        // Create a task first
         Map<String, String> createRequest = new HashMap<>();
         createRequest.put("title", "Original Task");
         createRequest.put("tasklistId", tasklistId);
@@ -126,7 +121,6 @@ class TaskIntegrationTest {
         Map<String, Object> task = objectMapper.readValue(createResponse, Map.class);
         String taskId = (String) task.get("id");
 
-        // Update task
         Map<String, Object> updateRequest = new HashMap<>();
         updateRequest.put("title", "Updated Task");
         updateRequest.put("completed", true);
@@ -142,7 +136,6 @@ class TaskIntegrationTest {
 
     @Test
     void shouldCompleteTask() throws Exception {
-        // Create a task first
         Map<String, String> createRequest = new HashMap<>();
         createRequest.put("title", "Task To Complete");
         createRequest.put("tasklistId", tasklistId);
@@ -159,7 +152,6 @@ class TaskIntegrationTest {
         Map<String, Object> task = objectMapper.readValue(createResponse, Map.class);
         String taskId = (String) task.get("id");
 
-        // Complete task
         mockMvc.perform(patch("/api/v1/tasks/" + taskId + "/complete")
                         .header("Authorization", "Bearer " + authToken))
                 .andExpect(status().isOk())
@@ -168,7 +160,6 @@ class TaskIntegrationTest {
 
     @Test
     void shouldDeleteTask() throws Exception {
-        // Create a task first
         Map<String, String> createRequest = new HashMap<>();
         createRequest.put("title", "Task To Delete");
         createRequest.put("tasklistId", tasklistId);
@@ -185,7 +176,6 @@ class TaskIntegrationTest {
         Map<String, Object> task = objectMapper.readValue(createResponse, Map.class);
         String taskId = (String) task.get("id");
 
-        // Delete task
         mockMvc.perform(delete("/api/v1/tasks/" + taskId)
                         .header("Authorization", "Bearer " + authToken))
                 .andExpect(status().isNoContent());

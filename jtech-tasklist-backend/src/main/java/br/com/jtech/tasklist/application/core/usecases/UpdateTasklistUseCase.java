@@ -35,7 +35,6 @@ public class UpdateTasklistUseCase implements TasklistInputGateway {
                     if (!tasklist.getUserId().equals(userId)) {
                         throw new ResourceNotFoundException("Tasklist not found");
                     }
-                    // Check for duplicate title (excluding current tasklist)
                     if (!tasklist.getTitle().equals(data.getTitle()) && 
                         tasklistRepository.existsByUserIdAndTitle(userId, data.getTitle())) {
                         throw new ConflictException("A tasklist with this title already exists");

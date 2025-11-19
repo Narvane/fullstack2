@@ -43,7 +43,6 @@ public class ListTasksUseCase implements TaskInputGateway {
             }
             tasks = taskRepository.findByTasklistId(UUID.fromString(data.getTasklistId()));
         } else {
-            // List all tasks from user's tasklists
             var userTasklists = tasklistRepository.findByUserId(userId);
             tasks = userTasklists.stream()
                     .flatMap(tasklist -> taskRepository.findByTasklistId(tasklist.getId()).stream())

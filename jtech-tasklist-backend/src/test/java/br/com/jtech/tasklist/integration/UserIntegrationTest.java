@@ -30,7 +30,6 @@ class UserIntegrationTest {
 
     @Test
     void shouldRegisterAndAuthenticateUser() throws Exception {
-        // Register user
         Map<String, String> registerRequest = new HashMap<>();
         registerRequest.put("name", "Test User");
         registerRequest.put("email", "test@example.com");
@@ -48,7 +47,6 @@ class UserIntegrationTest {
                 .getResponse()
                 .getContentAsString();
 
-        // Authenticate user
         Map<String, String> loginRequest = new HashMap<>();
         loginRequest.put("email", "test@example.com");
         loginRequest.put("password", "password123");
@@ -69,13 +67,11 @@ class UserIntegrationTest {
         registerRequest.put("email", "duplicate@example.com");
         registerRequest.put("password", "password123");
 
-        // First registration
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerRequest)))
                 .andExpect(status().isCreated());
 
-        // Duplicate registration
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerRequest)))

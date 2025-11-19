@@ -58,7 +58,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 });
             }
         } catch (Exception e) {
-            // Token invalid or expired
         } finally {
             filterChain.doFilter(request, response);
             SecurityContext.clear();

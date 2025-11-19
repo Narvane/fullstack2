@@ -33,7 +33,6 @@ public class CompleteTaskUseCase implements TaskInputGateway {
 
         taskRepository.findById(UUID.fromString(data.getId()))
                 .ifPresentOrElse(task -> {
-                    // Validate tasklist ownership
                     if (task.getTasklistId() != null) {
                         var tasklist = tasklistRepository.findById(UUID.fromString(task.getTasklistId()))
                                 .orElseThrow(() -> new ResourceNotFoundException("Task not found"));

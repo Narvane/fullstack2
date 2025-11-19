@@ -24,13 +24,11 @@ export const useTaskStore = defineStore('taskStore', {
           ...list,
           tasks: []
         }))
-        // Fetch tasks for each tasklist
         for (const list of this.taskLists) {
           try {
             const { data: tasksResponse } = await api.get<{ tasks: Task[] }>(`/api/v1/tasks?taskListId=${list.id}`)
             list.tasks = tasksResponse.tasks || []
           } catch (error) {
-            // If tasks fail to load, continue with empty array
             list.tasks = []
           }
         }

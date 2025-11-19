@@ -29,7 +29,6 @@ public class CreateTasklistUseCase implements TasklistInputGateway {
             throw new UnauthorizedException("User not authenticated");
         }
 
-        // Check for duplicate title
         if (tasklistRepository.existsByUserIdAndTitle(userId, data.getTitle())) {
             throw new ConflictException("A tasklist with this title already exists");
         }

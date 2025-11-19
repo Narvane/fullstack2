@@ -34,7 +34,6 @@ class TasklistIntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        // Register and authenticate user
         Map<String, String> registerRequest = new HashMap<>();
         registerRequest.put("name", "Test User");
         registerRequest.put("email", "tasklist-test@example.com");
@@ -48,7 +47,6 @@ class TasklistIntegrationTest {
                 .getResponse()
                 .getContentAsString();
 
-        // Extract token from response (simplified - in real scenario use JSON parsing)
         Map<String, Object> response = objectMapper.readValue(registerResponse, Map.class);
         authToken = (String) response.get("token");
         userId = (String) response.get("id");
@@ -70,7 +68,6 @@ class TasklistIntegrationTest {
 
     @Test
     void shouldListTasklists() throws Exception {
-        // Create a tasklist first
         Map<String, String> createRequest = new HashMap<>();
         createRequest.put("title", "List Test Tasklist");
 
@@ -80,7 +77,6 @@ class TasklistIntegrationTest {
                         .content(objectMapper.writeValueAsString(createRequest)))
                 .andExpect(status().isCreated());
 
-        // List tasklists
         mockMvc.perform(get("/api/v1/tasklists")
                         .header("Authorization", "Bearer " + authToken))
                 .andExpect(status().isOk())
@@ -91,7 +87,6 @@ class TasklistIntegrationTest {
 
     @Test
     void shouldUpdateTasklist() throws Exception {
-        // Create a tasklist first
         Map<String, String> createRequest = new HashMap<>();
         createRequest.put("title", "Original Title");
 
@@ -107,7 +102,6 @@ class TasklistIntegrationTest {
         Map<String, Object> tasklist = objectMapper.readValue(createResponse, Map.class);
         String tasklistId = (String) tasklist.get("id");
 
-        // Update tasklist
         Map<String, String> updateRequest = new HashMap<>();
         updateRequest.put("title", "Updated Title");
 
@@ -121,7 +115,6 @@ class TasklistIntegrationTest {
 
     @Test
     void shouldDeleteTasklist() throws Exception {
-        // Create a tasklist first
         Map<String, String> createRequest = new HashMap<>();
         createRequest.put("title", "To Be Deleted");
 
@@ -137,12 +130,10 @@ class TasklistIntegrationTest {
         Map<String, Object> tasklist = objectMapper.readValue(createResponse, Map.class);
         String tasklistId = (String) tasklist.get("id");
 
-        // Delete tasklist
         mockMvc.perform(delete("/api/v1/tasklists/" + tasklistId)
                         .header("Authorization", "Bearer " + authToken))
                 .andExpect(status().isNoContent());
 
-        // Verify it's deleted
         mockMvc.perform(get("/api/v1/tasklists")
                         .header("Authorization", "Bearer " + authToken))
                 .andExpect(status().isOk())

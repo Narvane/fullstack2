@@ -34,7 +34,6 @@ public class UpdateTaskUseCase implements TaskInputGateway {
 
         taskRepository.findById(UUID.fromString(data.getId()))
                 .ifPresentOrElse(task -> {
-                    // Validate tasklist ownership
                     if (task.getTasklistId() != null) {
                         var tasklist = tasklistRepository.findById(UUID.fromString(task.getTasklistId()))
                                 .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
@@ -44,7 +43,6 @@ public class UpdateTaskUseCase implements TaskInputGateway {
                     }
 
                     if (data.getTitle() != null) {
-                        // Check for duplicate task title in the same tasklist (excluding current task)
                         UUID currentTasklistId = task.getTasklistId() != null ? 
                                 UUID.fromString(task.getTasklistId()) : null;
                         if (currentTasklistId != null && 
@@ -55,7 +53,6 @@ public class UpdateTaskUseCase implements TaskInputGateway {
                         task.setTitle(data.getTitle());
                     }
                     if (data.getTasklistId() != null) {
-                        // Validate new tasklist ownership
                         var newTasklist = tasklistRepository.findById(UUID.fromString(data.getTasklistId()))
                                 .orElseThrow(() -> new ResourceNotFoundException("Tasklist not found"));
                         if (!newTasklist.getUserId().equals(userId)) {

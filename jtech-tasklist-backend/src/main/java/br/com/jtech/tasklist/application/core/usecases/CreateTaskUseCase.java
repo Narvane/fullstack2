@@ -39,7 +39,6 @@ public class CreateTaskUseCase implements TaskInputGateway {
             if (!tasklist.getUserId().equals(userId)) {
                 throw new ResourceNotFoundException("Tasklist not found");
             }
-            // Check for duplicate task title in the same tasklist
             if (taskRepository.existsByTasklistIdAndTitle(UUID.fromString(data.getTasklistId()), data.getTitle())) {
                 throw new ConflictException("A task with this title already exists in this tasklist");
             }
