@@ -99,8 +99,8 @@ class TasklistJpaAdapterTest {
         List<Tasklist> result = adapter.findAll();
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getId()).isEqualTo(tasklistId);
-        assertThat(result.get(0).getTitle()).isEqualTo("My Task List");
+        assertThat(result.getFirst().getId()).isEqualTo(tasklistId);
+        assertThat(result.getFirst().getTitle()).isEqualTo("My Task List");
     }
 
     @Test
@@ -111,7 +111,7 @@ class TasklistJpaAdapterTest {
         List<Tasklist> result = adapter.findByUserId(userId);
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getUserId()).isEqualTo(userId);
+        assertThat(result.getFirst().getUserId()).isEqualTo(userId);
     }
 
     @Test

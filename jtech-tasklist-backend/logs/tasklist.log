@@ -110,3 +110,63 @@ This generated password is for development use only. Your security configuration
 2025-11-19T08:05:04.627-03:00  INFO 22296 --- [tasklist] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-11-19T08:05:04.630-03:00  INFO 22296 --- [tasklist] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-11-19T08:05:04.634-03:00  INFO 22296 --- [tasklist] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-11-19T13:20:24.901-03:00  INFO 24604 --- [tasklist] [Test worker] b.c.j.t.integration.TaskIntegrationTest  : Starting TaskIntegrationTest v1.0.0-SNAPSHOT using Java 21.0.7 with PID 24604 (started by User in C:\Users\User\Documents\fullstack\jtech-tasklist-backend)
+2025-11-19T13:20:24.908-03:00 DEBUG 24604 --- [tasklist] [Test worker] b.c.j.t.integration.TaskIntegrationTest  : Running with Spring Boot v3.5.5, Spring v6.2.10
+2025-11-19T13:20:24.911-03:00  INFO 24604 --- [tasklist] [Test worker] b.c.j.t.integration.TaskIntegrationTest  : The following 1 profile is active: "test"
+2025-11-19T13:20:29.053-03:00  INFO 24604 --- [tasklist] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-19T13:20:29.565-03:00  INFO 24604 --- [tasklist] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 462 ms. Found 3 JPA repository interfaces.
+2025-11-19T13:20:31.961-03:00  INFO 24604 --- [tasklist] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-19T13:20:33.868-03:00  INFO 24604 --- [tasklist] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-11-19T13:20:33.881-03:00  INFO 24604 --- [tasklist] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-19T13:20:34.412-03:00  INFO 24604 --- [tasklist] [Test worker] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:testdb (H2 2.3)
+2025-11-19T13:20:34.608-03:00  INFO 24604 --- [tasklist] [Test worker] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2025-11-19T13:20:34.621-03:00  INFO 24604 --- [tasklist] [Test worker] o.f.core.internal.command.DbValidate     : Successfully validated 2 migrations (execution time 00:00.100s)
+2025-11-19T13:20:34.643-03:00  INFO 24604 --- [tasklist] [Test worker] org.flywaydb.core.Flyway                 : All configured schemas are empty; baseline operation skipped. A baseline or migration script with a lower version than the baseline version may execute if available. Check the Schemas parameter if this is not intended.
+2025-11-19T13:20:34.643-03:00  INFO 24604 --- [tasklist] [Test worker] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2025-11-19T13:20:34.790-03:00  INFO 24604 --- [tasklist] [Test worker] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": << Empty Schema >>
+2025-11-19T13:20:34.813-03:00  INFO 24604 --- [tasklist] [Test worker] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "1 - create tasklists and tasks"
+2025-11-19T13:20:34.866-03:00  INFO 24604 --- [tasklist] [Test worker] o.f.core.internal.command.DbMigrate      : Migrating schema "PUBLIC" to version "2 - add users and user relations"
+2025-11-19T13:20:34.903-03:00  INFO 24604 --- [tasklist] [Test worker] o.f.core.internal.command.DbMigrate      : Successfully applied 2 migrations to schema "PUBLIC", now at version v2 (execution time 00:00.053s)
+2025-11-19T13:20:35.298-03:00  INFO 24604 --- [tasklist] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-19T13:20:35.670-03:00  INFO 24604 --- [tasklist] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-11-19T13:20:35.864-03:00  INFO 24604 --- [tasklist] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-19T13:20:36.690-03:00  INFO 24604 --- [tasklist] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-19T13:20:36.962-03:00  WARN 24604 --- [tasklist] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-19T13:20:37.069-03:00  INFO 24604 --- [tasklist] [Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-19T13:20:41.344-03:00  INFO 24604 --- [tasklist] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-19T13:20:41.452-03:00  INFO 24604 --- [tasklist] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-19T13:20:42.862-03:00  INFO 24604 --- [tasklist] [Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-19T13:20:46.442-03:00  WARN 24604 --- [tasklist] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-19T13:20:47.432-03:00  INFO 24604 --- [tasklist] [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 15 endpoints beneath base path '/actuator'
+2025-11-19T13:20:47.527-03:00  WARN 24604 --- [tasklist] [Test worker] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 5fc48c14-c1da-4a85-80bb-0729da9ec431
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-11-19T13:20:47.562-03:00  INFO 24604 --- [tasklist] [Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2025-11-19T13:20:49.636-03:00 DEBUG 24604 --- [tasklist] [Test worker] b.c.j.t.c.i.s.JwtAuthenticationFilter    : Filter 'jwtAuthenticationFilter' configured for use
+2025-11-19T13:20:49.636-03:00  INFO 24604 --- [tasklist] [Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-11-19T13:20:49.636-03:00  INFO 24604 --- [tasklist] [Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-11-19T13:20:49.638-03:00  INFO 24604 --- [tasklist] [Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2025-11-19T13:20:49.861-03:00  INFO 24604 --- [tasklist] [Test worker] b.c.j.t.integration.TaskIntegrationTest  : Started TaskIntegrationTest in 27.362 seconds (process running for 53.267)
+2025-11-19T13:20:50.047-03:00  INFO 24604 --- [tasklist] [Test worker] b.c.j.t.c.i.utils.ReadyEventListener     : >>> Connector Ready
+2025-11-19T13:20:50.047-03:00  INFO 24604 --- [tasklist] [Test worker] b.c.j.t.c.i.utils.ReadyEventListener     : ======================================================
+2025-11-19T13:20:50.047-03:00  INFO 24604 --- [tasklist] [Test worker] b.c.j.t.c.i.utils.ReadyEventListener     : == Execute mode:.....................'LOCAL'
+2025-11-19T13:20:50.047-03:00  INFO 24604 --- [tasklist] [Test worker] b.c.j.t.c.i.utils.ReadyEventListener     : ======================================================
+2025-11-19T13:20:50.053-03:00  WARN 24604 --- [tasklist] [Test worker] o.s.core.events.SpringDocAppInitializer  : SpringDoc /doc/tasklist/v3/api-documents endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2025-11-19T13:20:50.054-03:00  WARN 24604 --- [tasklist] [Test worker] o.s.core.events.SpringDocAppInitializer  : SpringDoc /doc/tasklist/v1/api.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2025-11-19T13:20:52.778-03:00  INFO 24604 --- [tasklist] [Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [br.com.jtech.tasklist.integration.TasklistIntegrationTest]: TasklistIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-19T13:20:52.786-03:00  INFO 24604 --- [tasklist] [Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration br.com.jtech.tasklist.StartTasklist for test class br.com.jtech.tasklist.integration.TasklistIntegrationTest
+2025-11-19T13:20:53.793-03:00  INFO 24604 --- [tasklist] [Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [br.com.jtech.tasklist.integration.UserIntegrationTest]: UserIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-19T13:20:53.801-03:00  INFO 24604 --- [tasklist] [Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration br.com.jtech.tasklist.StartTasklist for test class br.com.jtech.tasklist.integration.UserIntegrationTest
+2025-11-19T13:20:54.449-03:00  INFO 24604 --- [tasklist] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-11-19T13:20:54.455-03:00  INFO 24604 --- [tasklist] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-11-19T13:20:54.458-03:00  INFO 24604 --- [tasklist] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

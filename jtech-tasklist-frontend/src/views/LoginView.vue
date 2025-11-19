@@ -77,7 +77,7 @@ const password = ref('')
 
 async function onSubmit() {
   if (!email.value || !password.value) {
-    ui.showError('Preencha email e senha')
+    ui.showError('Enter your email and password.')
     return
   }
 
