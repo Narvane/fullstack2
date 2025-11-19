@@ -29,4 +29,6 @@ public interface TasklistJpaRepository extends JpaRepository<TasklistEntity, UUI
     
     List<TasklistEntity> findByUserId(UUID userId);
     
+    boolean existsByUserIdAndTitle(UUID userId, String title);
+    
 }

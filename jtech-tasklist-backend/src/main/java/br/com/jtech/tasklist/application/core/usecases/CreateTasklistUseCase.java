@@ -7,6 +7,8 @@ import br.com.jtech.tasklist.application.ports.protocols.TasklistInputData;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
 import br.com.jtech.tasklist.application.ports.protocols.TasklistOutputData;
 import br.com.jtech.tasklist.application.ports.output.repositories.TasklistRepository;
+import br.com.jtech.tasklist.config.infra.exceptions.ConflictException;
+import br.com.jtech.tasklist.config.infra.exceptions.UnauthorizedException;
 import br.com.jtech.tasklist.config.infra.security.SecurityContext;
 
 import java.util.UUID;
@@ -24,7 +26,12 @@ public class CreateTasklistUseCase implements TasklistInputGateway {
     public void exec(TasklistInputData data) {
         UUID userId = SecurityContext.getCurrentUserId();
         if (userId == null) {
-            throw new RuntimeException("User not authenticated");
+            throw new UnauthorizedException("User not authenticated");
+        }
+
+        // Check for duplicate title
+        if (tasklistRepository.existsByUserIdAndTitle(userId, data.getTitle())) {
+            throw new ConflictException("A tasklist with this title already exists");
         }
 
         var createdTask = tasklistRepository.save(

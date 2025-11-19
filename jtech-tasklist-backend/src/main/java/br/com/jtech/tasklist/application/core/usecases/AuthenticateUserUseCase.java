@@ -5,6 +5,7 @@ import br.com.jtech.tasklist.application.ports.protocols.UserInputData;
 import br.com.jtech.tasklist.application.ports.output.UserOutputGateway;
 import br.com.jtech.tasklist.application.ports.protocols.UserOutputData;
 import br.com.jtech.tasklist.application.ports.output.repositories.UserRepository;
+import br.com.jtech.tasklist.config.infra.exceptions.UnauthorizedException;
 import br.com.jtech.tasklist.config.infra.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -29,10 +30,10 @@ public class AuthenticateUserUseCase implements UserInputGateway {
     @Override
     public void exec(UserInputData data) {
         var user = userRepository.findByEmail(data.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+                .orElseThrow(() -> new UnauthorizedException("Invalid credentials"));
 
         if (!passwordEncoder.matches(data.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new UnauthorizedException("Invalid credentials");
         }
 
         // Generate JWT token

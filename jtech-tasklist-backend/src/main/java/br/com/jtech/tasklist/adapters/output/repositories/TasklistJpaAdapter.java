@@ -68,4 +68,9 @@ public class TasklistJpaAdapter implements TasklistRepository {
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    @Override
+    public boolean existsByUserIdAndTitle(UUID userId, String title) {
+        return repository.existsByUserIdAndTitle(userId, title);
+    }
+
 }

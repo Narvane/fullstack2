@@ -59,6 +59,11 @@ public class TaskJpaAdapter implements TaskRepository {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean existsByTasklistIdAndTitle(UUID tasklistId, String title) {
+        return repository.existsByTasklistIdAndTitle(tasklistId, title);
+    }
+
     private Task toDomain(TaskEntity entity) {
         return Task.builder()
                 .id(entity.getId())

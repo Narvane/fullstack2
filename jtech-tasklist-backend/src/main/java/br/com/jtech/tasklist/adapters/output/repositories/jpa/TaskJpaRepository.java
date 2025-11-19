@@ -15,5 +15,8 @@ public interface TaskJpaRepository extends JpaRepository<TaskEntity, UUID> {
     @Query("SELECT t FROM TaskEntity t WHERE t.tasklist.id = :tasklistId")
     List<TaskEntity> findByTasklistId(@Param("tasklistId") UUID tasklistId);
 
+    @Query("SELECT COUNT(t) > 0 FROM TaskEntity t WHERE t.tasklist.id = :tasklistId AND t.title = :title")
+    boolean existsByTasklistIdAndTitle(@Param("tasklistId") UUID tasklistId, @Param("title") String title);
+
 }
 

@@ -25,23 +25,28 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-        info = @Info(contact = @Contact(name = "Jtech Solucoes em Informatica",
-                email = "helder.puia@veolia.com"), title = "???",
-                termsOfService = "www.jtech.com.br/terms-and-condition",
-                description = "${api.description}",
-                version = "${api.version}"),
+        info = @Info(
+                contact = @Contact(
+                        name = "Jtech Solucoes em Informatica",
+                        email = "support@jtech.com.br"
+                ),
+                title = "Tasklist API",
+                description = "API for managing tasklists and tasks with JWT authentication",
+                version = "${api.version}"
+        ),
         servers = {
-                @Server(url = "http://localhost:8081/${spring.application.name}", description = "Development"),
-                @Server(url = "${api.url.homologation}/${spring.application.name}", description = "Homologation"),
-                @Server(url = "${api.url.production}", description = "Production")
+                @Server(url = "http://localhost:8080", description = "Development Server"),
+                @Server(url = "${api.url.homologation}", description = "Homologation Server"),
+                @Server(url = "${api.url.production}", description = "Production Server")
         }
 )
 /**
-* class OpenAPI30Configuration
-*
-* @author: angelo.vicente
-*/
+ * OpenAPI 3.0 Configuration for Tasklist API
+ *
+ * @author angelo.vicente
+ */
 public class OpenAPI30Configuration {
+    
     @Bean
     public OpenAPI customizeOpenAPI() {
         final String securitySchemeName = "bearerAuth";
@@ -53,9 +58,8 @@ public class OpenAPI30Configuration {
                                 .name(securitySchemeName)
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
-                                .description(
-                                        "Provide the JWT token.")
-                                .bearerFormat("JWT")));
+                                .bearerFormat("JWT")
+                                .description("JWT Authentication. Provide the token in the format: Bearer {token}")));
     }
 
 }

@@ -18,4 +18,6 @@ public interface TasklistRepository {
 
     List<Tasklist> findByUserId(UUID userId);
 
+    boolean existsByUserIdAndTitle(UUID userId, String title);
+
 }

@@ -6,6 +6,7 @@ import br.com.jtech.tasklist.application.ports.protocols.TasklistInputData;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
 import br.com.jtech.tasklist.application.ports.protocols.TasklistOutputData;
 import br.com.jtech.tasklist.application.ports.output.repositories.TasklistRepository;
+import br.com.jtech.tasklist.config.infra.exceptions.UnauthorizedException;
 import br.com.jtech.tasklist.config.infra.security.SecurityContext;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class ListTasklistUseCase implements TasklistInputGateway {
     public void exec(TasklistInputData data) {
         UUID userId = SecurityContext.getCurrentUserId();
         if (userId == null) {
-            throw new RuntimeException("User not authenticated");
+            throw new UnauthorizedException("User not authenticated");
         }
 
         List<Tasklist> tasklists = tasklistRepository.findByUserId(userId);

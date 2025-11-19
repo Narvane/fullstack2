@@ -18,5 +18,7 @@ public interface TaskRepository {
 
     List<Task> findAll();
 
+    boolean existsByTasklistIdAndTitle(UUID tasklistId, String title);
+
 }
 

@@ -71,7 +71,7 @@ public class ApiError {
      * @param message Custom message for response error.
      * @param ex      Cause of the error.
      */
-    ApiError(HttpStatus status, String message, Throwable ex) {
+    public ApiError(HttpStatus status, String message, Throwable ex) {
         this();
         this.status = status;
         this.message = message;

@@ -5,6 +5,9 @@ import br.com.jtech.tasklist.application.ports.protocols.TasklistInputData;
 import br.com.jtech.tasklist.application.ports.output.TasklistOutputGateway;
 import br.com.jtech.tasklist.application.ports.protocols.TasklistOutputData;
 import br.com.jtech.tasklist.application.ports.output.repositories.TasklistRepository;
+import br.com.jtech.tasklist.config.infra.exceptions.ConflictException;
+import br.com.jtech.tasklist.config.infra.exceptions.ResourceNotFoundException;
+import br.com.jtech.tasklist.config.infra.exceptions.UnauthorizedException;
 import br.com.jtech.tasklist.config.infra.security.SecurityContext;
 
 import java.util.UUID;
@@ -24,13 +27,18 @@ public class UpdateTasklistUseCase implements TasklistInputGateway {
     public void exec(TasklistInputData data) {
         UUID userId = SecurityContext.getCurrentUserId();
         if (userId == null) {
-            throw new RuntimeException("User not authenticated");
+            throw new UnauthorizedException("User not authenticated");
         }
 
         tasklistRepository.findById(UUID.fromString(data.getId()))
                 .ifPresentOrElse(tasklist -> {
                     if (!tasklist.getUserId().equals(userId)) {
-                        throw new RuntimeException("Tasklist not found");
+                        throw new ResourceNotFoundException("Tasklist not found");
+                    }
+                    // Check for duplicate title (excluding current tasklist)
+                    if (!tasklist.getTitle().equals(data.getTitle()) && 
+                        tasklistRepository.existsByUserIdAndTitle(userId, data.getTitle())) {
+                        throw new ConflictException("A tasklist with this title already exists");
                     }
                     tasklist.setTitle(data.getTitle());
 
@@ -43,7 +51,7 @@ public class UpdateTasklistUseCase implements TasklistInputGateway {
                             .build()
                     );
                 }, () -> {
-                    throw new RuntimeException("Tasklist not found");
+                    throw new ResourceNotFoundException("Tasklist not found");
                 });
     }
 

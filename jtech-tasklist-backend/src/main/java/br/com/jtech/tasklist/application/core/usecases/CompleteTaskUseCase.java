@@ -6,6 +6,8 @@ import br.com.jtech.tasklist.application.ports.output.TaskOutputGateway;
 import br.com.jtech.tasklist.application.ports.protocols.TaskOutputData;
 import br.com.jtech.tasklist.application.ports.output.repositories.TaskRepository;
 import br.com.jtech.tasklist.application.ports.output.repositories.TasklistRepository;
+import br.com.jtech.tasklist.config.infra.exceptions.ResourceNotFoundException;
+import br.com.jtech.tasklist.config.infra.exceptions.UnauthorizedException;
 import br.com.jtech.tasklist.config.infra.security.SecurityContext;
 
 import java.util.UUID;
@@ -26,7 +28,7 @@ public class CompleteTaskUseCase implements TaskInputGateway {
     public void exec(TaskInputData data) {
         UUID userId = SecurityContext.getCurrentUserId();
         if (userId == null) {
-            throw new RuntimeException("User not authenticated");
+            throw new UnauthorizedException("User not authenticated");
         }
 
         taskRepository.findById(UUID.fromString(data.getId()))
@@ -34,9 +36,9 @@ public class CompleteTaskUseCase implements TaskInputGateway {
                     // Validate tasklist ownership
                     if (task.getTasklistId() != null) {
                         var tasklist = tasklistRepository.findById(UUID.fromString(task.getTasklistId()))
-                                .orElseThrow(() -> new RuntimeException("Task not found"));
+                                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
                         if (!tasklist.getUserId().equals(userId)) {
-                            throw new RuntimeException("Task not found");
+                            throw new ResourceNotFoundException("Task not found");
                         }
                     }
 
@@ -53,7 +55,7 @@ public class CompleteTaskUseCase implements TaskInputGateway {
                                     .build()
                     );
                 }, () -> {
-                    throw new RuntimeException("Task not found");
+                    throw new ResourceNotFoundException("Task not found");
                 });
     }
 }
