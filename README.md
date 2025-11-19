@@ -1,130 +1,85 @@
-# Desafio Técnico Fullstack2 - JTech
+# JTech Tasklist
 
-## Sistema TODO List Multi-usuário com Arquitetura Avançada
+Aplicação fullstack de gerenciamento de tarefas multiusuário construída para demonstrar domínio de arquitetura limpa no backend e organização modular no frontend.
 
-### Contextualização e Objetivo
+## Visão Geral da Arquitetura
 
-A **JTech** busca desenvolvedores frontend experientes capazes de construir aplicações robustas e escaláveis com arquitetura bem definida. Este desafio avalia sua competência em gerenciamento de estado complexo, arquitetura modular e implementação de sistemas multi-usuário.
+- Mesmo com o enunciado sugerindo a cadeia clássica Controller → Service → Repository → Domain, optei por seguir o estilo já adotado no código base de Clean Architecture, expandindo apenas onde fazia sentido (ex.: presenters, qualifiers dedicados e escopos específicos).
+- Os módulos Java foram divididos em `adapters` (entrada/saída), `application` (domínio e use cases) e `config` (injeções, presenters, qualifiers). Essa separação manteve o domínio isolado de frameworks e facilitou a troca de implementações externas.
+- No frontend organizei o fluxo em camadas claras: stores (Pinia) concentram estado/efeitos, services encapsulam comunicação HTTP e componentes/páginas apenas orquestram interações.
+- Escolhi conscientemente uma arquitetura robusta para provar proficiência. Em um projeto de menor porte eu simplificaria camadas, mas mantive o padrão completo para evidenciar boas práticas de produção.
 
-**Objetivo:** Desenvolver uma aplicação frontend sofisticada que simule um sistema TODO List multi-usuário, demonstrando expertise em arquitetura de componentes, gerenciamento de estado avançado e boas práticas de desenvolvimento.
+## Stack Tecnológica
 
-## Especificações Técnicas
+- **Backend**: Java 17, Spring Boot 3, Spring Security, Spring Data JPA, PostgreSQL, Flyway, JJWT, Jakarta Validation. Preferi documentar a API via Swagger/OpenAPI usando apenas o arquivo `openapi.yaml` para manter as classes limpas.
+- **Frontend**: Vue 3 (Composition API + TypeScript), Vue Router 4, Pinia 3, Bootstrap 5 (com Bootstrap Vue Next) para UI, Axios para HTTP, Vite para build e Vitest/vue-test-utils para testes.
+- **Observações**: A stack original sugeria uma lib Material Design, mas optei por Bootstrap por domínio prévio. Nunca havia usado Vue; utilizei assistência de IA para mapear conceitos que já dominava em React e acelerar o aprendizado sem abrir mão dos requisitos.
 
-### Requisitos Funcionais
+## Como Rodar Localmente
 
-#### Sistema de Autenticação Simulada
+1. **Pré-requisitos**: Docker/Docker Compose, Java 17+, Node 20+, npm.
+2. **Banco/Postgres**  
+   ```bash
+   cd jtech-tasklist-backend/composer
+   docker compose up -d
+   ```
+3. **Backend**  
+   ```bash
+   cd jtech-tasklist-backend
+   ./gradlew bootRun
+   ```  
+   API disponível em `http://localhost:8080`. Documentação em `http://localhost:8080/doc/tasklist/v1/swagger-ui/index.html`.
+4. **Frontend**  
+   ```bash
+   cd jtech-tasklist-frontend
+   npm install
+   npm run dev
+   ```  
+   Interface em `http://localhost:5173`. Basta acessar as URLs informadas após subir o compose.
 
-1. **Interface de Login**: Tela de autenticação com validação de campos não vazios
-2. **Autenticação Mock**: Qualquer combinação válida de usuário/senha redireciona para a aplicação
-3. **Persistência de Sessão**: Manter dados do usuário logado no estado global da aplicação
+## Como Rodar os Testes
 
-#### Gerenciamento Avançado de Listas
+- **Backend**: `cd jtech-tasklist-backend && ./gradlew test`
+- **Frontend**: `cd jtech-tasklist-frontend && npm run test:unit`
 
-1. **Múltiplas Listas de Tarefas**: Usuário pode criar listas categorizadas (ex: "Trabalho", "Estudos", "Pessoal")
-2. **CRUD Completo de Listas**:
-   * Criar novas listas com nomes personalizados
-   * Renomear listas existentes com validação
-   * Excluir listas com confirmação e verificação de dependências
-3. **Navegação entre Listas**: Interface intuitiva para alternar entre diferentes listas
+## Estrutura de Pastas Detalhada
 
-#### Sistema Completo de Tarefas
+```
+.
+├── jtech-tasklist-backend
+│   ├── composer/                 # docker-compose com Postgres local
+│   ├── src/main/java/br/com/jtech/tasklist
+│   │   ├── adapters/input        # controllers REST + protocolos de entrada
+│   │   ├── adapters/output       # presenters, repositories e gateways externos
+│   │   ├── application/core      # domínios e use cases (regras puras)
+│   │   ├── application/ports     # contratos input/output e protocolos
+│   │   └── config                # configs de DI, qualifiers, presenters, segurança e swagger
+│   ├── src/main/resources        # Flyway migrations, application.yml, openapi.yaml
+│   └── src/test/java             # testes de unidade e integração fatiados por adapters/core
+├── jtech-tasklist-frontend
+│   ├── src
+│   │   ├── components            # componentes reutilizáveis (cards, colunas)
+│   │   ├── views                 # páginas (Login, Register, Board)
+│   │   ├── stores                # Pinia stores (auth, tasks, UI)
+│   │   ├── services              # camada de API (axios)
+│   │   ├── router                # rotas + guards
+│   │   └── types                 # contratos compartilhados
+│   └── public / config           # assets, Vite, ESLint, TS configs
+└── README.md                     # este documento
+```
 
-1. **Gerenciamento por Lista**: Cada lista mantém suas próprias tarefas independentemente
-2. **CRUD de Tarefas**: Adicionar, editar, remover e marcar tarefas como concluídas dentro de cada lista
-3. **Validações Avançadas**: Prevenção de duplicatas, validação de campos obrigatórios
+## Decisões Técnicas Aprofundadas
 
-#### Persistência e Navegação
+- **Clean Architecture com presenters**: cada use case retorna modelos de domínio puros; presenters no pacote `adapters/output/presenters` traduzem para DTOs sob request scope, evitando retornos diretos nas ações REST e reforçando separação de responsabilidades.
+- **Request scope consciente**: controllers permanecem stateless enquanto presenters mantêm estado apenas durante o ciclo da requisição, reduzindo acoplamento e permitindo reutilização entre diferentes endpoints com respostas específicas.
+- **Qualifiers explícitos**: utilizei qualifiers nomeados em `config/qualifiers` para tornar legível qual implementação concreta está sendo injetada (ex.: repositórios distintos ou diferentes strategies). Isso evita ambiguidades do Spring e documenta a intenção no próprio código.
+- **Swagger via YAML**: a especificação OpenAPI mora em `src/main/resources/openapi.yaml`, carregada pela configuração customizada, deixando classes Java sem anotações ruidosas e permitindo versionamento claro da documentação.
+- **Frontend opinado**: Bootstrap substituiu a biblioteca Material sugerida para ganhar velocidade na entrega sem sacrificar responsividade. Mesmo sendo novo em Vue, mantive boas práticas (Composition API, stores tipadas, components desacoplados) e consultei IA apenas para acelerar o mapeamento dos conceitos que já aplicava em React.
 
-1. **Estado Persistente**: Todo o estado (usuário, listas, tarefas) gerenciado pelo Pinia e persistido
-2. **Roteamento**: Vue Router para separar autenticação da aplicação principal
-3. **Guards de Rota**: Proteção de rotas para usuários não autenticados
+## Melhorias e Roadmap de Escalabilidade
 
+- **Isolamento de domínios sensíveis**: em um cenário de maior escala, migraria o módulo de usuários/dados pessoais para um microserviço dedicado, mantendo o tasklist separado e reduzindo o raio de impacto de mudanças.
+- **Autenticação enterprise**: substituiria o fluxo atual por OAuth2/OIDC com Authorization Server externo (ex.: Keycloak ou Cognito) e tokens de acesso/refresh robustos para suportar integrações com parceiros.
+- **Segurança de dados**: adicionaria encriptação transparente para campos sensíveis, políticas de rotação de segredos e observabilidade centralizada (audit logging, tracing distribuído).
+- **Infra escalável**: containers separados para frontend/backend, banco gerenciado e provisionamento IaC, permitindo autoscaling e deploy independente de cada contexto.
 
-### Stack Tecnológica Obrigatória
-
-* **Framework**: Vue 3 (Composition API)
-* **Roteamento**: Vue Router 4
-* **Gerenciamento de Estado**: Pinia
-* **UI Framework**: Material Design (Vuetify ou biblioteca equivalente)
-* **Testes**: Vitest para testes unitários abrangentes
-* **TypeScript**: Fortemente recomendado para tipagem robusta
-
-# BACKEND
-
-## Especificações Técnicas
-
-### Requisitos Funcionais
-
-#### Sistema de Autenticação Segura
-
-1. **Registro de Usuários**:
-   * Endpoint `POST /auth/register` para cadastro com nome, email e senha
-   * Implementação de hash seguro de senhas utilizando bcrypt
-   * Validação de unicidade de email
-2. **Autenticação JWT**:
-   * Endpoint `POST /auth/login` para autenticação e geração de token JWT
-   * Implementação de refresh token para segurança aprimorada
-
-#### Gerenciamento de Tarefas com Segurança
-
-1. **CRUD Completo de Tarefas**:
-   * `POST /tasks`: Criar tarefa associada ao usuário autenticado
-   * `GET /tasks`: Listar exclusivamente tarefas do usuário logado
-   * `GET /tasks/{id}`: Buscar tarefa específica com validação de propriedade
-   * `PUT /tasks/{id}`: Atualizar tarefa com controle de acesso
-   * `DELETE /tasks/{id}`: Remover tarefa com validação de proprietário
-2. **Autorização Robusta**: Todas as rotas protegidas por JWT com validação de propriedade dos recursos
-
-### Requisitos Não Funcionais
-
-#### Arquitetura e Design Patterns
-
-1. **Princípios SOLID**: Implementação rigorosa dos cinco princípios em todas as camadas
-2. **Arquitetura em Camadas**: Estrutura bem definida (Controller → Service → Repository → Domain)
-3. **Injeção de Dependência**: Utilização adequada do Spring Framework para IoC
-4. **Exception Handling**: Sistema robusto de tratamento centralizado de exceções
-
-#### Qualidade e Testabilidade
-
-1. **Testes Unitários**: Cobertura completa da camada de serviço com cenários de sucesso e falha
-2. **Testes de Integração**: Validação end-to-end dos endpoints com Spring Test
-3. **Mocks e Stubs**: Utilização adequada de Mockito para isolamento de dependências
-
-### Stack Tecnológica Obrigatória
-
-* **Linguagem**: Java 17+
-* **Framework**: Spring Boot, Spring Security, Spring Validation
-* **Persistência**: Spring Data JPA com Hibernate
-* **Banco de Dados**: PostgreSQL
-* **Segurança**: JWT, BCrypt
-* **Testes**: JUnit 5, Mockito, Spring Boot Test
-
-## Critérios de Avaliação
-
-* **Aplicação de SOLID**: Demonstração clara e justificada dos princípios SOLID (critério principal)
-* **Qualidade Arquitetural**: Design limpo, modular com separação clara de responsabilidades
-* **Cobertura de Testes**: Suite robusta e significativa de testes unitários e de integração
-* **Implementação de Segurança**: Autenticação e autorização corretamente implementadas
-* **Domínio da Stack**: Utilização avançada e adequada do ecossistema Spring
-* **Domínio da Stack**: Utilização avançada das ferramentas do ecossistema Vue.js
-* **Modelagem de Dados**: Relacionamento bem definido entre entidades User e Task
-* **Documentação Técnica**: README detalhado com justificativas arquiteturais
-
-## Expectativa de Entrega
-
-* **Prazo**: Até 3 dias corridos a partir do recebimento.
-* **Formato**: Repositório Git com código-fonte completo e documentação detalhada.
-
-### Estrutura Obrigatória do `README.md`
-
-1. **Visão Geral da Arquitetura**: Descrição detalhada da estrutura e decisões arquiteturais
-2. **Stack Tecnológica**: Lista completa com justificativas para cada escolha
-3. **Como Rodar Localmente**: Instruções passo a passo para setup e execução
-4. **Como Rodar os Testes**: Comandos para executar suite completa de testes
-5. **Estrutura de Pastas Detalhada**: Mapeamento completo da organização modular do código
-6. **Decisões Técnicas Aprofundadas**: Justificativas detalhadas sobre escolhas arquiteturais, padrões e bibliotecas
-7. **Melhorias e Roadmap**: Propostas técnicas para evolução e escalabilidade da aplicação
-
----
-
-**Boa sorte! A JTech espera uma solução que demonstre maturidade em desenvolvimento frontend e visão arquitetural.**
